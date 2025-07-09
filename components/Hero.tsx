@@ -121,7 +121,7 @@ export default function Hero() {
                                         transition={{ delay: 0.5, duration: 0.4 }}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className="mt-6 px-6 cursor-pointer py-2 rounded-full border border-white bg-transparent text-white hover:bg-white hover:text-black transition"
+                                        className="mt-6 px-6 cursor-pointer py-2 rounded-none border border-white bg-transparent text-white hover:bg-white hover:text-black transition"
                                     >
                                         Details
                                     </motion.button>
