@@ -95,7 +95,7 @@ export default function Header() {
                         {/* Contact Us */}
                         <button
                             className={clsx(
-                                'ml-4 cursor-pointer px-5 py-2 rounded-full text-sm border transition-all duration-300',
+                                'ml-4 cursor-pointer px-5 py-2 rounded-none text-sm border transition-all duration-300',
                                 scrolled
                                     ? 'border-black text-black hover:bg-black hover:text-white'
                                     : 'border-white text-white hover:bg-white hover:text-black'
@@ -174,7 +174,7 @@ export default function Header() {
                             </a>
                         </div>
 
-                        <button className="px-5 cursor-pointer py-2 rounded-full text-sm border border-white text-white hover:bg-white hover:text-black transition-all duration-300">
+                        <button className="px-5 cursor-pointer py-2 rounded-none text-sm border border-white text-white hover:bg-white hover:text-black transition-all duration-300">
                             CONTACT
                         </button>
                     </motion.div>
