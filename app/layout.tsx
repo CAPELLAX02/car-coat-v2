@@ -1,9 +1,20 @@
 import './globals.css';
 import type { Metadata } from 'next';
+
 import { Inter, Anton } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const anton = Anton({ subsets: ['latin'], weight: '400', variable: '--font-anton' });
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter',
+    display: 'swap',
+});
+
+const anton = Anton({
+    weight: '400',
+    subsets: ['latin'],
+    variable: '--font-anton',
+    display: 'swap',
+});
 
 import Header from '@/components/Header';
 
@@ -17,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" className={`${inter.variable} ${anton.variable}`}>
             <body className={inter.className}>
                 <Header />
-                <main className="pt-20">{children}</main>
+                <main>{children}</main>
             </body>
         </html>
     );

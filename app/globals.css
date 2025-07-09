@@ -2,13 +2,10 @@
 
 html,
 body {
-  @apply bg-white text-black scroll-smooth;
+  scroll-behavior: smooth;
+  background-color: #fff;
 }
-
-h1, h2, h3, .font-display {
-  font-family: var(--font-anton), sans-serif;
-}
-
-body, p, span, .font-body {
-  font-family: var(--font-inter), sans-serif;
+h1 {
+  font-family: 'Anton';
+  font-weight: normal;
 }
