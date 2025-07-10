@@ -3,6 +3,7 @@ import OurServicesIntro from "@/components/OurServicesIntro";
 import ServicesGrid from "@/components/ServiceGrid";
 import ImageSection from "@/components/ImageSection";
 import WarrantyCheck from "@/components/WarrantyCheck";
+import Testimonials from "@/components/Testimonials";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
         <ServicesGrid />
         <ImageSection />
         <WarrantyCheck />
+        <Testimonials />
       </>
   );
 }
