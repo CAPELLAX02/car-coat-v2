@@ -116,13 +116,13 @@ export default function Testimonials() {
                     <div className="mt-10 flex items-center gap-4">
                         <button
                             onClick={prevTestimonial}
-                            className="p-3 border border-white rounded-full hover:bg-white/10 transition-all duration-300 group"
+                            className="p-3 border border-white rounded-none hover:bg-white/10 transition-all duration-300 group"
                         >
                             <FaArrowLeft className="text-white group-hover:scale-x-125 group-hover:w-18  transition-all duration-300 cursor-pointer" />
                         </button>
                         <button
                             onClick={nextTestimonial}
-                            className="p-3 border border-white rounded-full hover:bg-white/10 transition-all duration-300 group"
+                            className="p-3 border border-white rounded-none hover:bg-white/10 transition-all duration-300 group"
                         >
                             <FaArrowRight className="text-white group-hover:scale-x-125 group-hover:w-18  transition-all duration-300 cursor-pointer" />
                         </button>

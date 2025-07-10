@@ -42,7 +42,7 @@ export default function Footer() {
                                 <motion.a
                                     key={i}
                                     href="#"
-                                    className="p-3 mr-2 rounded-full text-black hover:text-white hover:bg-black transition-all duration-200"
+                                    className="p-3 mr-2 rounded-none text-black hover:text-white hover:bg-black transition-all duration-200"
                                 >
                                     <Icon size={32} />
                                 </motion.a>
