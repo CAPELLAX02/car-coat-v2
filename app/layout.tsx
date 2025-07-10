@@ -17,6 +17,7 @@ const anton = Anton({
 });
 
 import Header from '@/components/Header';
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
     title: 'Mechano Clone',
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={inter.className}>
                 <Header />
                 <main>{children}</main>
+                <Footer />
             </body>
         </html>
     );
