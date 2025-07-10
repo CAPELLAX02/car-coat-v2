@@ -59,9 +59,9 @@ export default function Header() {
 
                         <div className="relative group">
                             <button className={`${linkClass(scrolled)} flex items-center gap-1`}>
-                                SERVICES <ChevronDown size={16} />
+                                <Link href="/services">SERVICES</Link> <ChevronDown size={16} />
                             </button>
-                            <div className="pointer-events-none group-hover:pointer-events-auto absolute top-full left-0 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300 z-50 min-w-[220px]">
+                            <div className="pointer-events-none group-hover:pointer-events-auto absolute top-full left-0 bg-white shadow-lg rounded-none opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300 z-50 min-w-[220px]">
                                 {services.map((service) => (
                                     <Link
                                         key={service.slug}
