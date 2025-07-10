@@ -6,7 +6,8 @@ import { FaCar, FaShieldAlt, FaMagic } from 'react-icons/fa';
 export default function DynamicServicePage({ params }: { params: { slug: string } }) {
     const service = services.find((s) => s.slug === params.slug);
 
-    if (!service) return notFound();
+    if (!service)
+        notFound();
 
     return (
         <ServicePage
@@ -16,19 +17,26 @@ export default function DynamicServicePage({ params }: { params: { slug: string 
                 {
                     icon: <FaCar />,
                     title: 'Top Quality',
-                    description: 'Premium materials and expert techniques for long-lasting protection.',
+                    description:
+                        'Premium materials and expert techniques for long-lasting protection.',
                 },
                 {
                     icon: <FaShieldAlt />,
                     title: 'Ultimate Protection',
-                    description: 'Safeguard your car against scratches, debris, and fading.',
+                    description:
+                        'Safeguard your car against scratches, debris, and fading.',
                 },
                 {
                     icon: <FaMagic />,
                     title: 'Flawless Finish',
-                    description: 'Maintain a sleek, high-gloss look with minimal maintenance.',
+                    description:
+                        'Maintain a sleek, high-gloss look with minimal maintenance.',
                 },
             ]}
         />
     );
+}
+
+export async function generateStaticParams() {
+    return services.map((s) => ({ slug: s.slug }));
 }
