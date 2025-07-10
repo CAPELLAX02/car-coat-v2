@@ -3,11 +3,22 @@ import ServicePage from '@/components/ServicePage';
 import { services } from '@/data/services';
 import { FaCar, FaShieldAlt, FaMagic } from 'react-icons/fa';
 
-export default function DynamicServicePage({ params }: { params: { slug: string } }) {
-    const service = services.find((s) => s.slug === params.slug);
+interface ServiceParams {
+    slug: string;
+}
 
-    if (!service)
-        notFound();
+/* Next 15: params ⇒ Promise */
+interface DynamicServicePageProps {
+    params: Promise<ServiceParams>;
+}
+
+export default async function DynamicServicePage({
+                                                     params,
+                                                 }: DynamicServicePageProps) {
+    const { slug } = await params;
+
+    const service = services.find((s) => s.slug === slug);
+    if (!service) notFound();
 
     return (
         <ServicePage
