@@ -20,7 +20,7 @@ interface ServicePageProps {
 
 export default function ServicePage({ title, image, features }: ServicePageProps) {
     return (
-        <div className="bg-white text-black">
+        <div className="bg-white text-black overflow-hidden">
 
             {/* HERO IMAGE */}
             <div className="relative h-[65vh] w-full">

@@ -69,34 +69,34 @@ export default function ContactPage() {
                             <div className="flex gap-4 mt-6 flex-wrap">
                                 {[
                                     {
-                                        icon: <FiFacebook size={44} />,
-                                        color: 'bg-white', // Facebook blue
+                                        icon: <FiFacebook size={36} />,
+                                        color: 'bg-black', // Facebook blue
                                         hover: 'hover:bg-[#1877F2] hover:text-white hover:border-white',
                                     },
                                     {
-                                        icon: <FiTwitter size={44} />,
-                                        color: 'bg-white', // Twitter blue
+                                        icon: <FiTwitter size={36} />,
+                                        color: 'bg-black', // Twitter blue
                                         hover: 'hover:bg-[#1DA1F2] hover:text-white hover:border-white',
                                     },
                                     {
-                                        icon: <FiYoutube size={44} />,
-                                        color: 'bg-white', // YouTube red
+                                        icon: <FiYoutube size={36} />,
+                                        color: 'bg-black', // YouTube red
                                         hover: 'hover:bg-[#FF0000] hover:text-white hover:border-white',
                                     },
                                     {
-                                        icon: <FaWhatsapp size={44} />,
-                                        color: 'bg-white', // WhatsApp green
+                                        icon: <FaWhatsapp size={36} />,
+                                        color: 'bg-black', // WhatsApp green
                                         hover: 'hover:bg-[#25D366] hover:text-white hover:border-white',
                                     },
                                     {
-                                        icon: <FiInstagram size={44} />,
-                                        color: 'bg-white',
+                                        icon: <FiInstagram size={36} />,
+                                        color: 'bg-black',
                                         hover: 'hover:bg-fuchsia-500 hover:text-white hover:border-white',
                                     },
                                 ].map((btn, idx) => (
                                     <button
                                         key={idx}
-                                        className={`text-black cursor-pointer border-black border-2 p-3 rounded-none ${btn.color} ${btn.hover} transition-all duration-300`}
+                                        className={`text-white cursor-pointer border-black border-4 p-2 rounded-none ${btn.color} ${btn.hover} transition-all duration-300`}
                                     >
                                         {btn.icon}
                                     </button>

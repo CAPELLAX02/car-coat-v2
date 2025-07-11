@@ -9,7 +9,7 @@ import {
     Car,
     Gauge,
     CircleDashed,
-    ArrowRight,
+    ArrowRight, ArrowBigRightDashIcon,
 } from 'lucide-react';
 
 const services = [
@@ -26,34 +26,33 @@ const services = [
 export default function ServicesGrid() {
     return (
         <section className="w-full bg-white">
-            <div className="grid grid-cols-2 md:grid-cols-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 overflow-hidden">
                 {services.map((service, i) => {
                     const Icon = service.icon;
                     const isDark =
-                        (Math.floor(i / 4) + i) % 2 === 0; // Bu formül çapraz için
+                        (Math.floor(i / 4) + i) % 2 === 0;
 
                     return (
                         <motion.div
                             key={service.title}
-                            className={`group h-64 p-8 flex flex-col justify-between transition-all duration-300 ${
+                            className={`group h-64 p-8 cursor-pointer flex flex-col justify-between hover:bg-gradient-to-r hover:from-orange-600 hover:to-purple-700 transition-colors duration-400 hover:text-white ${
                                 isDark
-                                    ? 'bg-black text-white hover:bg-amber-950'
-                                    : 'bg-white text-black hover:bg-amber-300/30'
+                                    ? 'bg-black text-white'
+                                    : 'bg-white text-black'
                             }`}
                         >
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 group-hover:scale-105 group-hover:pt-5 pl-5 transition-all duration-500">
                                 <Icon className="w-10 h-10" />
                                 <h3 className="text-lg font-bold uppercase font-display">
                                     {service.title}
                                 </h3>
                             </div>
 
-                            <motion.div
-                                whileHover={{ x: 5 }}
+                            <div
                                 className="mt-4 transition-transform duration-300"
                             >
-                                <ArrowRight size={20} />
-                            </motion.div>
+                                <ArrowBigRightDashIcon size={40} className="group-hover:translate-x-10 group-hover:scale-150 transition-all duration-400" />
+                            </div>
                         </motion.div>
                     );
                 })}

@@ -9,6 +9,7 @@ import React, {
     KeyboardEvent,
 } from 'react';
 import { motion } from 'framer-motion';
+import {CgSpinner} from "react-icons/cg";
 
 /* ─────────────────── Yardımcılar ─────────────────── */
 const trDate = (d: Date) =>
@@ -138,7 +139,7 @@ export default function WarrantyCheck() {
 
         if (result.type === 'error')
             return (
-                <div className="w-full md:w-3/4 bg-red-50 border border-red-200 text-red-700 rounded-lg p-6 shadow">
+                <div className="w-full md:w-3/4 bg-red-50 border overflow-hidden border-red-200 text-red-700 rounded-lg p-6 shadow">
                     <h3 className="font-semibold flex items-center gap-2">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <circle cx="12" cy="12" r="10" />
@@ -155,7 +156,7 @@ export default function WarrantyCheck() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="w-full md:w-3/4 bg-gray-50 border border-gray-200 rounded-xl p-8 shadow"
+                className="w-full md:w-3/4 bg-gray-50 border border-gray-200 rounded-xl overflow-hidden p-8 shadow"
             >
                 <h3 className="text-lg font-bold text-green-700 mb-4 flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -183,8 +184,8 @@ export default function WarrantyCheck() {
             <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center gap-12">
                 {/* başlık */}
                 <motion.h1
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -200 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6 }}
                     className="text-5xl md:text-6xl font-display font-bold text-center"
                 >
@@ -194,8 +195,20 @@ export default function WarrantyCheck() {
                     CODE VERIFICATION
                 </motion.h1>
 
+                <motion.p
+                    initial={{ opacity: 0, x: 200 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="text-lg max-w-5xl">
+                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+                </motion.p>
+
                 {/* inputlar */}
-                <div className="flex flex-col items-center gap-6 w-full">
+                <motion.div
+                    initial={{ opacity: 0, y: 100 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="flex flex-col items-center gap-6 w-full">
                     <div className="flex gap-4">
                         {fields.map((val, i) => (
                             <input
@@ -208,7 +221,7 @@ export default function WarrantyCheck() {
                                 maxLength={4}
                                 placeholder="0000"
                                 inputMode="numeric"
-                                className="w-20 text-center text-lg font-semibold tracking-widest border border-gray-300 rounded-md py-3 shadow focus:ring-2 focus:ring-black outline-none"
+                                className="w-20 text-center text-lg font-semibold tracking-widest border border-gray-300 rounded-md py-3 shadow focus:ring-2 focus:ring-amber-500 focus:scale-110 transition-all duration-300 outline-none"
                                 style={{ fontFamily: 'JetBrains Mono' }}
                             />
                         ))}
@@ -216,21 +229,21 @@ export default function WarrantyCheck() {
 
                     {/* actions */}
                     <div className="flex gap-4">
-                        <button
-                            onClick={query}
-                            disabled={loading}
-                            className="px-10 py-3 bg-black text-white font-semibold rounded shadow hover:bg-green-700 transition disabled:opacity-50"
-                        >
-                            {loading ? 'SORGU...' : 'SORGULA'}
-                        </button>
+                            <button
+                                onClick={query}
+                                disabled={loading}
+                                className="px-10 py-3 cursor-pointer bg-black text-white font-semibold rounded shadow hover:bg-green-700 transition disabled:opacity-50"
+                            >
+                                {loading ? <CgSpinner className="text-2xl" /> : 'Sorgula'}
+                            </button>
                         <button
                             onClick={clear}
-                            className="px-4 py-3 border border-gray-400 text-gray-700 rounded shadow hover:bg-gray-100 transition"
+                            className="px-4 py-3 cursor-pointer border border-gray-400 text-gray-900 rounded shadow hover:bg-gray-100 transition"
                         >
                             Temizle
                         </button>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* sonuç kartı */}
                 {renderCard()}

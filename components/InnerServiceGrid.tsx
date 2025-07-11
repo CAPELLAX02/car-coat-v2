@@ -70,11 +70,9 @@ function ServiceCard({ service }: { service: (typeof services)[number] }) {
 
                 <Link
                     href={`/services/${service.slug}`}
-                    className="inline-flex items-center justify-between w-40 px-4 py-3
-                     border-2 border-white bg-white/90 text-sm text-black
-                     group/button transition-all duration-300 hover:bg-black/60 hover:text-white font-bold"
+                    className="inline-flex items-center justify-between w-40 px-4 py-3 text-md text-white hover:border-transparent group/button transition-all duration-300 hover:bg-gradient-to-r border-2 border-white hover:from-orange-800 hover:to-purple-700 hover:text-white font-bold"
                 >
-                    See Details
+                    DETAILS
                     <motion.span
                         variants={{
                             initial: { x: 0 },

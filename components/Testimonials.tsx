@@ -42,7 +42,7 @@ export default function Testimonials() {
                     alt="Garage background"
                     className="w-full h-full object-cover opacity-20"
                 />
-                <div className="absolute inset-0 bg-black/70" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/100" />
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12">

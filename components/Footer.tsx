@@ -7,8 +7,7 @@ import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 export default function Footer() {
     return (
         <>
-            <div className="bg-gradient-to-r from-orange-500 to-purple-500 h-30"></div>
-            <footer className="bg-white text-black pt-16 pb-8">
+            <footer className="bg-white text-black pt-16 pb-8 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
                     {/* Logo + Description */}
                     <div>
