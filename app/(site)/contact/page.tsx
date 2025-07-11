@@ -14,7 +14,7 @@ export default function ContactPage() {
                 style={{ backgroundImage: "url('/assets/hero-4.jpg')" }}
             />
 
-            <div className="bg-gray-700 h-12"></div>
+            <div className="bg-gradient-to-r from-orange-700 to-red-700 h-12"></div>
 
             {/* Contact Content */}
             <section className="bg-white pt-20 pb-40">

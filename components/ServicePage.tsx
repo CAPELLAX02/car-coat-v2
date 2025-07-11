@@ -72,7 +72,7 @@ export default function ServicePage({ title, image, features }: ServicePageProps
                             whileInView={{ opacity: 1, y: index * 100 }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
                             className={clsx(
-                                " group hover:text-white hover:bg-gray-800 transition-all duration-300 bg-white px-12 py-6 rounded-none shadow-lg hover:shadow-2xl cursor-pointer",
+                                " group hover:text-white hover:bg-black transition-all duration-300 bg-white px-12 py-6 rounded-none shadow-lg hover:shadow-2xl cursor-pointer",
                                 `my-${index}`
                             )}
                         >

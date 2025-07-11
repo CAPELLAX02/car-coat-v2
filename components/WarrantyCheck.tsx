@@ -238,7 +238,7 @@ export default function WarrantyCheck() {
                             </button>
                         <button
                             onClick={clear}
-                            className="px-4 py-3 cursor-pointer border border-gray-400 text-gray-900 rounded shadow hover:bg-gray-100 transition"
+                            className="px-4 py-3 cursor-pointer border border-gray-600 text-gray-900 rounded shadow hover:bg-gray-100 transition"
                         >
                             Temizle
                         </button>

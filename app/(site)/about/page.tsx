@@ -91,7 +91,7 @@ export default function AboutPage() {
                     style={{ y }}
                     className="absolute inset-0 bg-[url('/hero-garage.jpg')] bg-cover bg-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-950 to-orange-950 border-b-4 border-white" />
+                <div className="absolute inset-0 bg-gradient-to-tl from-red-950 to-gray-900 border-b-4 border-white" />
                 <svg className="absolute bottom-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
                     <path d="M0 70L1600 0V70H0Z" fill="#fff" />
                 </svg>
@@ -135,11 +135,11 @@ export default function AboutPage() {
             </section>
 
             {/* ================= İSTATİSTİKLER ================= */}
-            <section className="py-20 bg-gray-100">
+                <section className="py-20 bg-gradient-to-r from-red-100 to-white">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 text-center">
                     {stats.map(({ icon: Icon, label, value }) => (
                         <motion.div key={label} {...fadeUp} className="flex flex-col items-center gap-3">
-                            <Icon size={40} className="text-purple-600" />
+                            <Icon size={40} className="text-red-600" />
                             <span className="text-4xl font-extrabold text-black">
                 <Counter to={value} duration={2} />
               </span>
@@ -163,7 +163,7 @@ export default function AboutPage() {
                             whileHover={{ y: -6 }}
                             className="relative bg-white border border-gray-200 rounded-none p-6 shadow-sm overflow-hidden"
                         >
-                            <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-tr from-purple-600 to-orange-500 rotate-45 opacity-20" />
+                            <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-tr from-red-600 to-orange-500 rotate-45 opacity-20" />
                             <Icon size={32} className="text-orange-600 mb-4" />
                             <h3 className="font-semibold text-xl mb-3">{title}</h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -176,7 +176,7 @@ export default function AboutPage() {
             </section>
 
             {/* ================= DEĞERLER ================= */}
-            <section className="relative py-28 bg-purple-950 text-white">
+            <section className="relative py-28 bg-gradient-to-r from-red-900 to-orange-800 text-white">
                 <svg className="absolute top-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
                     <path d="M0 0L1600 70V0H0Z" fill="#fff" />
                 </svg>
@@ -226,7 +226,7 @@ export default function AboutPage() {
 
                     <a
                         href="/contact"
-                        className="inline-flex items-center gap-2 bg-gray-800 text-white font-semibold px-8 py-4 rounded-none shadow hover:scale-105 transition pointer-events-auto"
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-700 to-red-700 text-white font-semibold px-8 py-4 rounded-none shadow hover:scale-105 transition pointer-events-auto"
                     >
                         Randevu Al
                     </a>
