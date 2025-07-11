@@ -35,7 +35,7 @@ export default function ServicesGrid() {
                     return (
                         <motion.div
                             key={service.title}
-                            className={`group h-64 p-8 cursor-pointer flex flex-col justify-between hover:bg-gradient-to-r hover:from-orange-600 hover:to-purple-700 transition-colors duration-400 hover:text-white ${
+                            className={`group h-64 p-8 cursor-pointer flex flex-col justify-between hover:bg-gradient-to-br hover:from-orange-600 hover:to-purple-600 transition-colors duration-400 hover:text-white ${
                                 isDark
                                     ? 'bg-black text-white'
                                     : 'bg-white text-black'

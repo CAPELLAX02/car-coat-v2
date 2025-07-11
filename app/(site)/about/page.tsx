@@ -1,0 +1,237 @@
+'use client';
+
+import Image from 'next/image';
+import { useRef, useEffect } from 'react';
+import {
+    motion,
+    useScroll,
+    useTransform,
+    useInView,
+    animate,
+    type MotionProps,
+} from 'framer-motion';
+import {
+    Award,
+    Factory,
+    Users,
+    Wrench,
+    Gauge,
+    PaintBucket,
+    Settings2,
+    Bike,
+    Car,
+    CheckCircle2,
+    Leaf,
+    ShieldCheck,
+    MapPin,
+    PhoneCall,
+} from 'lucide-react';
+
+/* ─────────────────── Yardımcı Animasyon Ayarı ─────────────────── */
+const fadeUp: MotionProps = {
+    initial: { opacity: 0, y: 40 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.7, ease: 'easeOut' },
+};
+
+/* ─────────────────── Sayı Sayacı ─────────────────── */
+interface CounterProps {
+    from?: number;
+    to: number;
+    duration?: number;
+}
+
+function Counter({ from = 0, to, duration = 1.8 }: CounterProps) {
+    const ref = useRef<HTMLSpanElement>(null);
+    const isInView = useInView(ref, { once: true });
+
+    useEffect(() => {
+        if (isInView && ref.current) {
+            const controls = animate(from, to, {
+                duration,
+                onUpdate(v) {
+                    if (ref.current) ref.current.textContent = Math.floor(v).toLocaleString('tr-TR');
+                },
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, from, to, duration]);
+
+    return <span ref={ref}>0</span>;
+}
+
+/* ─────────────────── İstatistik ve Hizmet Verileri ─────────────────── */
+const stats = [
+    { icon: Users,   label: 'Mutlu Müşteri',  value: 12_500 },
+    { icon: Factory, label: 'Yıllık Üretim',  value: 3_000 },
+    { icon: Award,   label: 'Kalite Belgesi', value: 7 },
+];
+
+const services = [
+    { icon: Wrench,      title: 'Motor Modifikasyonları' },
+    { icon: Settings2,   title: 'Yedek Parça Çözümleri' },
+    { icon: PaintBucket, title: 'Özel Boya & Kaplama' },
+    { icon: Gauge,       title: 'Motor Diagnostiği' },
+    { icon: Car,         title: 'Fren & Süspansiyon' },
+    { icon: Bike,        title: 'Motosiklet Atölyesi' },
+];
+
+/* ─────────────────── Sayfa ─────────────────── */
+export default function AboutPage() {
+    /* Hero parallax */
+    const heroRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+    const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+
+    return (
+        <main className="text-black bg-white">
+            {/* ================= HERO ================= */}
+            <section ref={heroRef} className="relative h-[75vh] overflow-hidden">
+                <motion.div
+                    style={{ y }}
+                    className="absolute inset-0 bg-[url('/hero-garage.jpg')] bg-cover bg-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-950 to-orange-950 border-b-4 border-white" />
+                <svg className="absolute bottom-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
+                    <path d="M0 70L1600 0V70H0Z" fill="#fff" />
+                </svg>
+
+                <motion.div {...fadeUp} className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
+                    <h1 className="text-5xl md:text-7xl font-display font-bold text-white drop-shadow-2xl">
+                        SÜRÜŞE <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text h-3.5 z-40">TUTKU</span> SUNUYORUZ.
+                    </h1>
+                    <p className="mt-6 max-w-3xl text-lg md:text-xl text-white/90">
+                        2010'dan bu yana, motor sporları ruhunu sokaklara taşıyan <strong>özelleştirilmiş çözümler</strong> sunuyoruz.
+                        Mekanikten tasarıma, kaplamadan elektroniğe kadar her şeyi tek çatı altında buluşturduk.
+                    </p>
+                </motion.div>
+            </section>
+
+            {/* ================= HİKAYE ================= */}
+            <section className="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+                <motion.h2 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-10 text-center">
+                    Nasıl Başladık?
+                </motion.h2>
+
+                <div className="grid md:grid-cols-2 gap-10">
+                    <motion.div {...fadeUp}>
+                        <p className="leading-loose text-gray-900 mb-6">
+                            <strong>2009</strong> yılında iki mühendis arkadaşın hayali olarak yola çıktık. İlk atölyemiz sadece
+                            60&nbsp;m<sup>2</sup>’ydi ve elimizde birkaç torna tezgâhı ile ikinci el bir boya kabini vardı. Bugün
+                            1&nbsp;200&nbsp;m<sup>2</sup>’lik tesisimizde son teknoloji CNC, dyno ve boyahane ekipmanlarıyla
+                            çalışıyoruz.
+                        </p>
+                        <p className="leading-loose text-gray-900">
+                            Kuruluşumuzdan itibaren <em>yarış pistlerinden ilham aldık</em>. Her projede, müşteri beklentisinin ötesine
+                            geçmek için kaliteyi standardımız yaptık.
+                        </p>
+                    </motion.div>
+
+                    <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
+                        <Image src="/assets/hero-1.jpg" alt="" width={350} height={350} className="rounded-none object-cover shadow" />
+                        <Image src="/assets/hero-2.jpg" alt="" width={350} height={350} className="rounded-none object-cover shadow translate-y-8" />
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ================= İSTATİSTİKLER ================= */}
+            <section className="py-20 bg-gray-100">
+                <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 text-center">
+                    {stats.map(({ icon: Icon, label, value }) => (
+                        <motion.div key={label} {...fadeUp} className="flex flex-col items-center gap-3">
+                            <Icon size={40} className="text-purple-600" />
+                            <span className="text-4xl font-extrabold text-black">
+                <Counter to={value} duration={2} />
+              </span>
+                            <span className="text-gray-600 tracking-wide">{label}</span>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ================= HİZMETLER ================= */}
+            <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+                <motion.h2 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-14 text-center">
+                    Başlıca Hizmetlerimiz
+                </motion.h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 group">
+                    {services.map(({ icon: Icon, title }) => (
+                        <motion.div
+                            key={title}
+                            {...fadeUp}
+                            whileHover={{ y: -6 }}
+                            className="relative bg-white border border-gray-200 rounded-none p-6 shadow-sm overflow-hidden"
+                        >
+                            <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-tr from-purple-600 to-orange-500 rotate-45 opacity-20" />
+                            <Icon size={32} className="text-orange-600 mb-4" />
+                            <h3 className="font-semibold text-xl mb-3">{title}</h3>
+                            <p className="text-gray-900 leading-relaxed">
+                                Projenizi <strong>A’dan Z’ye</strong> üstleniyor; tasarım, parça tedariği, montaj ve yol testi dahil
+                                bütün süreçleri kendi bünyemizde tamamlıyoruz.
+                            </p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ================= DEĞERLER ================= */}
+            <section className="relative py-28 bg-purple-950 text-white">
+                <svg className="absolute top-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
+                    <path d="M0 0L1600 70V0H0Z" fill="#fff" />
+                </svg>
+
+                <div className="max-w-6xl mx-auto px-6 md:px-12 grid md:grid-cols-3 gap-10">
+                    {[ShieldCheck, Leaf, CheckCircle2].map((Icon, idx) => (
+                        <motion.div key={idx} {...fadeUp} className="flex flex-col items-center md:items-start gap-4">
+                            <Icon size={36} />
+                            <h3 className="text-xl font-semibold">
+                                {idx === 0 ? 'Güvenlik Önceliği' : idx === 1 ? 'Çevre Duyarlılığı' : 'Koşulsuz Garanti'}
+                            </h3>
+                            <p className="text-white/90 leading-loose">
+                                {idx === 0
+                                    ? 'Tüm modifikasyonlarımız TSE ve FIA standartlarına uygundur, yol güvenliğinden taviz vermeyiz.'
+                                    : idx === 1
+                                        ? 'Su bazlı boyalar, enerji geri kazanımlı fırınlar ve atık minimizasyonu ile yeşil üretim.'
+                                        : 'Her projede 12 ay işçilik, 3 yıl boya-kaplama garantisi sunuyoruz.'}
+                            </p>
+                        </motion.div>
+                    ))}
+                </div>
+
+                <svg className="absolute bottom-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
+                    <path d="M0 70L1600 0V70H0Z" fill="#fff" />
+                </svg>
+            </section>
+
+            {/* ================= CTA ================= */}
+            <section className="py-24">
+                <motion.div
+                    {...fadeUp}
+                    className="max-w-4xl mx-auto px-6 md:px-0 flex flex-col md:flex-row items-center justify-between gap-8"
+                >
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-2xl font-bold">Uzman ekibimizle tanışın</h3>
+                        <p className="text-gray-900 max-w-md">
+                            Sizi tesisimizde ağırlamaktan mutluluk duyarız. İhtiyaçlarınızı dinleyelim, size özel yol haritası
+                            çıkaralım.
+                        </p>
+                        <p className="flex items-center gap-2 text-gray-800">
+                            <MapPin size={18} /> X Mah. Y Cad. No:1/5A Kadıköy / İstanbul
+                        </p>
+                        <p className="flex items-center gap-2 text-gray-800">
+                            <PhoneCall size={18} /> 0 (216) 123 45 67
+                        </p>
+                    </div>
+
+                    <a
+                        href="/contact"
+                        className="inline-flex items-center gap-2 bg-gray-800 text-white font-semibold px-8 py-4 rounded-none shadow hover:scale-105 transition pointer-events-auto"
+                    >
+                        Randevu Al
+                    </a>
+                </motion.div>
+            </section>
+        </main>
+    );
+}

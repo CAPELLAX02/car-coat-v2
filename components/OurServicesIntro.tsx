@@ -22,7 +22,7 @@ export default function OurServicesIntro() {
 
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: '100%' }}
+                        whileInView={{ width: '100%' }}
                         transition={{ duration: 0.7 }}
                         className="h-px bg-black mt-2 mb-6"
                     />

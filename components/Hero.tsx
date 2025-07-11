@@ -84,7 +84,7 @@ export default function Hero() {
                                     <motion.h1
                                         key={`title-${activeIndex}`}
                                         initial={{ opacity: 0, x: -60 }}
-                                        animate={{ opacity: 1, x: 0 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
                                         transition={{ duration: 0.7 }}
                                         className="text-5xl md:text-7xl font-bold tracking-tight text-white uppercase leading-tight"
                                     >
@@ -107,7 +107,7 @@ export default function Hero() {
                                     <motion.p
                                         key={`text-${activeIndex}`}
                                         initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.3, duration: 0.6 }}
                                         className="text-gray-100 mt-6 max-w-xl"
                                     >
@@ -117,7 +117,7 @@ export default function Hero() {
                                     <motion.button
                                         key={`btn-${activeIndex}`}
                                         initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
                                         transition={{ delay: 0.5, duration: 0.4 }}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}

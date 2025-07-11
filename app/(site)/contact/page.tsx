@@ -25,7 +25,7 @@ export default function ContactPage() {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h1 className="text-6xl font-display font-black text-black mb-6">
+                        <h1 className="text-6xl font-display font-black text-black-800 mb-6">
                             <Typewriter
                                 words={["LET’S"]}
                                 loop={1}
@@ -46,9 +46,9 @@ export default function ContactPage() {
 
 
                         <motion.p
-                            className="text-lg text-black font-medium"
+                            className="text-lg text-black-800 font-medium"
                             initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.6 }}
                         >
                             Welcome to Mechano! Feel free to contact us anytime.
@@ -57,11 +57,11 @@ export default function ContactPage() {
                         <motion.div
                             className="mt-10"
                             initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.6 }}
                         >
-                            <p className="font-semibold text-black">Call Us</p>
-                            <p className="text-lg font-medium text-black mt-1 flex items-center gap-2">
+                            <p className="font-semibold text-black-800">Call Us</p>
+                            <p className="text-lg font-medium text-black-800 mt-1 flex items-center gap-2">
                                 <FiPhone /> +12 9887 234 199
                             </p>
 
@@ -70,33 +70,33 @@ export default function ContactPage() {
                                 {[
                                     {
                                         icon: <FiFacebook size={36} />,
-                                        color: 'bg-black', // Facebook blue
-                                        hover: 'hover:bg-[#1877F2] hover:text-white hover:border-white',
+                                        color: 'bg-gray-800', // Facebook blue
+                                        hover: 'hover:bg-[#1877F2] hover:scale-110 hover:border-[#1877F2] hover:text-white hover:-translate-y-1',
                                     },
                                     {
                                         icon: <FiTwitter size={36} />,
-                                        color: 'bg-black', // Twitter blue
-                                        hover: 'hover:bg-[#1DA1F2] hover:text-white hover:border-white',
+                                        color: 'bg-gray-800', // Twitter blue
+                                        hover: 'hover:bg-[#1DA1F2] hover:scale-110 hover:border-[#1DA1F2] hover:text-white hover:-translate-y-1',
                                     },
                                     {
                                         icon: <FiYoutube size={36} />,
-                                        color: 'bg-black', // YouTube red
-                                        hover: 'hover:bg-[#FF0000] hover:text-white hover:border-white',
+                                        color: 'bg-gray-800', // YouTube red
+                                        hover: 'hover:bg-[#FF0000] hover:scale-110 hover:border-[#FF0000] hover:text-white hover:-translate-y-1',
                                     },
                                     {
                                         icon: <FaWhatsapp size={36} />,
-                                        color: 'bg-black', // WhatsApp green
-                                        hover: 'hover:bg-[#25D366] hover:text-white hover:border-white',
+                                        color: 'bg-gray-800', // WhatsApp green
+                                        hover: 'hover:bg-[#25D366] hover:scale-110 hover:border-[#25D366] hover:text-white hover:-translate-y-1',
                                     },
                                     {
                                         icon: <FiInstagram size={36} />,
-                                        color: 'bg-black',
-                                        hover: 'hover:bg-fuchsia-500 hover:text-white hover:border-white',
+                                        color: 'bg-gray-800',
+                                        hover: 'hover:bg-fuchsia-500 hover:scale-110 hover:border-fuchsia-500 hover:text-white hover:-translate-y-1',
                                     },
                                 ].map((btn, idx) => (
                                     <button
                                         key={idx}
-                                        className={`text-white cursor-pointer border-black border-4 p-2 rounded-none ${btn.color} ${btn.hover} transition-all duration-300`}
+                                        className={`text-white cursor-pointer border-gray-800 border-4 p-2 rounded-none ${btn.color} ${btn.hover} transition-all duration-300`}
                                     >
                                         {btn.icon}
                                     </button>
@@ -115,21 +115,21 @@ export default function ContactPage() {
                         <input
                             type="text"
                             placeholder="Name"
-                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-black placeholder:text-sm"
+                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm"
                         />
                         <input
                             type="email"
                             placeholder="Email"
-                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-black placeholder:text-sm"
+                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm"
                         />
                         <textarea
                             rows={5}
                             placeholder="Your Message"
-                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-black placeholder:text-sm resize-none"
+                            className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm resize-none"
                         />
                         <button
                             type="submit"
-                            className="cursor-pointer w-fit px-6 py-3 mt-2 bg-black text-white hover:bg-orange-600 transition-all duration-300"
+                            className="cursor-pointer w-fit px-6 py-3 mt-2 bg-gray-800 text-white hover:bg-orange-600 transition-all duration-300"
                         >
                             Submit
                         </button>

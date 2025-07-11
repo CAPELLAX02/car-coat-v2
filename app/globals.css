@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+*::selection {
+  background-color: #333;
+  color: #eee;
+}
+
 html,
 body {
   scroll-behavior: smooth;
@@ -9,4 +14,12 @@ h1 {
   font-family: 'Anton';
   font-weight: normal;
   font-size: 100px;
+}
+
+@media (max-width: 1023px) {
+  h1 { font-size: 72px; }
+}
+
+@media (max-width: 767px) {
+  h1 { font-size: 48px; }
 }

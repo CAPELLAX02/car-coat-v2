@@ -9,7 +9,7 @@ export default function NotFound() {
         <section className="min-h-screen bg-black text-white flex items-center justify-center px-6">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
                 className="text-center max-w-xl"
             >

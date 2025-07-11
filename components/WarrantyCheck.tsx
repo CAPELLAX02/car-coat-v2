@@ -154,7 +154,7 @@ export default function WarrantyCheck() {
         return (
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
                 className="w-full md:w-3/4 bg-gray-50 border border-gray-200 rounded-xl overflow-hidden p-8 shadow"
             >
