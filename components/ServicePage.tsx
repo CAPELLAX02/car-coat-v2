@@ -40,7 +40,7 @@ export default function ServicePage({ title, image, features }: ServicePageProps
             </div>
 
             {/* INTRO SECTION */}
-            <section className="max-w-7xl mx-auto px-6 pt-16">
+            <section className="max-w-7xl mx-auto px-6 py-24">
                 <motion.h2
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -63,18 +63,16 @@ export default function ServicePage({ title, image, features }: ServicePageProps
             </section>
 
             {/* FEATURE BOXES */}
-            <section className="bg-gradient-to-b from-white to-violet-300 pt-32 pb-96">
+            <section className="bg-gradient-to-bl from-red-100 to-orange-100 pt-32 pb-96">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-6 transition-all duration-300 border-none">
                     {features.map((feature, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: index * 100 }}
-                            transition={{ delay: index * 0.2, duration: 0.6 }}
-                            className={clsx(
-                                " group hover:text-white hover:bg-black transition-all duration-300 bg-white px-12 py-6 rounded-none shadow-lg hover:shadow-2xl cursor-pointer",
-                                `my-${index}`
-                            )}
+                            className="group hover:text-white hover:bg-gradient-to-br hover:from-orange-500 hover:to-red-700 transition-all duration-300 bg-white px-12 py-6 rounded-none cursor-pointer hover:-translate-y-5"
+                            style={{
+                                marginTop: index * 100,
+                                marginBottom: - index * 100
+                            }}
                         >
                             <div className="text-5xl text-black mb-4 group-hover:text-white transition-all duration-300">
                                 {feature.icon}
@@ -85,7 +83,7 @@ export default function ServicePage({ title, image, features }: ServicePageProps
                             <p className="text-gray-600 text-lg group-hover:text-white transition-all duration-300">
                                 {feature.description}
                             </p>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </section>
