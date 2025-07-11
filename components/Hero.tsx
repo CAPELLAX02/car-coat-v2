@@ -95,7 +95,7 @@ export default function Hero() {
                                                     key={index}
                                                     className={clsx(
                                                         isHighlighted &&
-                                                        'bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text'
+                                                        'bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text'
                                                     )}
                                                 >
                           {word}{' '}
@@ -142,13 +142,13 @@ export default function Hero() {
                       <span
                           className={clsx(
                               'absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-white transition-all duration-300',
-                              isActive ? 'w-6 bg-gradient-to-r from-orange-500 to-purple-600' : 'w-3'
+                              isActive ? 'w-6 bg-gradient-to-r from-orange-600 to-red-700' : 'w-3'
                           )}
                       />
                                             <span
                                                 className={clsx(
                                                     'transition-colors duration-300',
-                                                    isActive ? 'text-gradient bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-600' : ''
+                                                    isActive ? 'text-gradient bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-red-700' : ''
                                                 )}
                                             >
                         0{num}

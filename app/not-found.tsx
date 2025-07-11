@@ -13,7 +13,7 @@ export default function NotFound() {
                 transition={{ duration: 0.7 }}
                 className="text-center max-w-xl"
             >
-                <h1 className="text-7xl md:text-9xl font-black font-display mb-4 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-600">
+                <h1 className="text-7xl md:text-9xl font-black font-display mb-4 text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-700">
                     Oops...
                 </h1>
                 <p className="text-xl md:text-2xl font-medium mb-6">

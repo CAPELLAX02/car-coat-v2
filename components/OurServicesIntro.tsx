@@ -34,7 +34,7 @@ export default function OurServicesIntro() {
                         className="text-5xl md:text-7xl font-display font-extrabold leading-tight uppercase"
                     >
                         We{' '}
-                        <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+                        <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
               Specialize
             </span>{' '}
                         in These Fields
@@ -56,7 +56,7 @@ export default function OurServicesIntro() {
                         initial={{ opacity: 0, y: 200 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="border-2 border-black rounded-none w-60 text-center group hover:bg-gradient-to-r hover:from-orange-200 hover:scale-110 hover:ml-3 hover:to-purple-300 hover:border-white transition-all duration-500"
+                        className="border-2 border-black rounded-none w-60 text-center group hover:bg-gradient-to-r hover:from-orange-200 hover:scale-110 hover:ml-3 hover:to-red-300 hover:border-white transition-all duration-500"
                     >
                         <Link
                             href="/services"

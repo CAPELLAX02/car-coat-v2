@@ -98,7 +98,7 @@ export default function AboutPage() {
 
                 <motion.div {...fadeUp} className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
                     <h1 className="text-5xl md:text-7xl font-display font-bold text-white drop-shadow-2xl">
-                        SÜRÜŞE <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text h-3.5 z-40">TUTKU</span> SUNUYORUZ.
+                        SÜRÜŞE <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">TUTKU</span> SUNUYORUZ.
                     </h1>
                     <p className="mt-6 max-w-3xl text-lg md:text-xl text-white/90">
                         2010'dan bu yana, motor sporları ruhunu sokaklara taşıyan <strong>özelleştirilmiş çözümler</strong> sunuyoruz.

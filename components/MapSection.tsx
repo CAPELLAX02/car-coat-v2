@@ -10,7 +10,7 @@ export default function MapSection() {
 
     return (
         <>
-            <div className="bg-gradient-to-r overflow-hidden from-orange-500 to-purple-500 h-15" />
+            <div className="bg-gradient-to-r overflow-hidden from-orange-500 to-red-500 h-15" />
 
             <div ref={ref} className="relative w-full h-[600px] overflow-hidden">
                 {/* Overlay */}

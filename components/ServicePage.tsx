@@ -47,7 +47,7 @@ export default function ServicePage({ title, image, features }: ServicePageProps
                     transition={{ duration: 0.6 }}
                     className="text-3xl font-bold text-center mb-4"
                 >
-                    Why Choose Our  <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text h-3.5 z-40">
+                    Why Choose Our  <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">
                     {title}
                 </span> {' '}
                      Service?
@@ -99,7 +99,7 @@ export default function ServicePage({ title, image, features }: ServicePageProps
                         transition={{ duration: 0.6 }}
                         className="text-3xl font-bold mb-4"
                     >
-                        Ready to Experience Premium  <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text h-3.5 z-40">
+                        Ready to Experience Premium  <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">
                     {title}?
                 </span>
                     </motion.h2>

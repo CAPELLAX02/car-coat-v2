@@ -32,7 +32,7 @@ export default function ContactPage() {
                                 cursor={false}
                                 typeSpeed={100}
                             />
-                            <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+                            <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
                             <Typewriter
                                 words={[" TALK!"]}
                                 loop={1}

@@ -59,7 +59,7 @@ export default function Testimonials() {
                     <div className="h-[2px] w-20 bg-yellow-400 mb-6"></div>
 
                     <h1 className="text-4xl md:text-5xl font-display font-extrabold leading-tight">
-                        WHAT OUR<br /> <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+                        WHAT OUR<br /> <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
               CLIENTS SAY
             </span><br /> ABOUT US.
                     </h1>

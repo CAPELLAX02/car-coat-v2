@@ -189,7 +189,7 @@ export default function WarrantyCheck() {
                     transition={{ duration: 0.6 }}
                     className="text-5xl md:text-6xl font-display font-bold text-center"
                 >
-          <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+          <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
             WARRANTY
           </span>{' '}
                     CODE VERIFICATION
@@ -232,7 +232,7 @@ export default function WarrantyCheck() {
                             <button
                                 onClick={query}
                                 disabled={loading}
-                                className="px-10 py-3 cursor-pointer bg-black text-white font-semibold rounded shadow hover:bg-green-700 transition disabled:opacity-50"
+                                className="px-10 py-3 cursor-pointer bg-black text-white font-semibold rounded shadow hover:bg-gradient-to-r from-orange-600 to-red-700 transition disabled:opacity-50"
                             >
                                 {loading ? <CgSpinner className="text-2xl" /> : 'Sorgula'}
                             </button>
