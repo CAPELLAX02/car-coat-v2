@@ -180,7 +180,7 @@ export default function WarrantyCheck() {
 
     /* ---------------- JSX ---------------- */
     return (
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-white" id="warrantyCheck">
             <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center gap-12">
                 {/* başlık */}
                 <motion.h1
@@ -190,17 +190,18 @@ export default function WarrantyCheck() {
                     className="text-5xl md:text-6xl font-display font-bold text-center"
                 >
           <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
-            WARRANTY
+            GARANTİ
           </span>{' '}
-                    CODE VERIFICATION
+                    KODU SORGULAMA
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, x: 200 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-lg max-w-5xl">
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+                    className="text-lg max-w-2xl"
+                >
+                    16 haneli garanti kodunuzu girerek kaplama ve hizmet geçmişinizi birkaç saniyede öğrenin. Kodunuzu kartınızın arka yüzünde bulabilirsiniz.
                 </motion.p>
 
                 {/* inputlar */}

@@ -24,7 +24,7 @@ import {
     Leaf,
     ShieldCheck,
     MapPin,
-    PhoneCall,
+    PhoneCall, Droplet, SprayCan, Sparkles, Sun, Lightbulb,
 } from 'lucide-react';
 
 /* ─────────────────── Yardımcı Animasyon Ayarı ─────────────────── */
@@ -68,12 +68,14 @@ const stats = [
 ];
 
 const services = [
-    { icon: Wrench,      title: 'Motor Modifikasyonları' },
-    { icon: Settings2,   title: 'Yedek Parça Çözümleri' },
-    { icon: PaintBucket, title: 'Özel Boya & Kaplama' },
-    { icon: Gauge,       title: 'Motor Diagnostiği' },
-    { icon: Car,         title: 'Fren & Süspansiyon' },
-    { icon: Bike,        title: 'Motosiklet Atölyesi' },
+    { icon: Droplet,      title: 'Seramik Kaplama' },
+    { icon: ShieldCheck,  title: 'Boya Koruma Filmi' },
+    { icon: SprayCan,     title: 'İç Detaylandırma' },
+    { icon: Sparkles,     title: 'Dış Detaylandırma' },
+    { icon: Gauge,        title: 'Motor Yıkama' },
+    { icon: Award,        title: 'Cilalama' },
+    { icon: Sun,          title: 'Cam Filmi' },
+    { icon: Lightbulb,    title: 'Far Yenileme' },
 ];
 
 /* ─────────────────── Sayfa ─────────────────── */
@@ -97,53 +99,59 @@ export default function AboutPage() {
                 </svg>
 
                 <motion.div {...fadeUp} className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
-                    <h1 className="text-5xl md:text-7xl font-display font-bold text-white drop-shadow-2xl">
-                        SÜRÜŞE <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">TUTKU</span> SUNUYORUZ.
+                    <h1 className="text-5xl md:text-7xl font-display font-bold text-white">
+                        SÜRÜŞE <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40">TUTKU</span> SUNUYORUZ.
                     </h1>
-                    <p className="mt-6 max-w-3xl text-lg md:text-xl text-white/90">
-                        2010'dan bu yana, motor sporları ruhunu sokaklara taşıyan <strong>özelleştirilmiş çözümler</strong> sunuyoruz.
+                    <p className="mt-6 max-w-4xl text-lg md:text-xl text-white/90">
+                        2010'dan bu yana, motor sporları ruhunu sokaklara taşıyan
+                        <span className="font-bold bg-gradient-to-r from-orange-300 to-red-300 text-transparent bg-clip-text h-3.5 z-40"> özelleştirilmiş çözümler </span>
+                        sunuyoruz.
                         Mekanikten tasarıma, kaplamadan elektroniğe kadar her şeyi tek çatı altında buluşturduk.
                     </p>
                 </motion.div>
             </section>
 
             {/* ================= HİKAYE ================= */}
-            <section className="py-24 px-6 md:px-12 max-w-6xl mx-auto">
-                <motion.h2 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-10 text-center">
-                    Nasıl Başladık?
-                </motion.h2>
+            <section className="pb-24 pt-16 px-6 md:px-12 max-w-6xl mx-auto">
+                <motion.h1 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-12 text-center"  style={{
+                    fontSize: '5rem',
+                }}>
+                    NASIL <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40"> BAŞLADI? </span>
+                </motion.h1>
 
                 <div className="grid md:grid-cols-2 gap-10">
                     <motion.div {...fadeUp}>
-                        <p className="leading-loose text-gray-900 mb-6">
+                        <p className="text-black mb-6">
                             <strong>2009</strong> yılında iki mühendis arkadaşın hayali olarak yola çıktık. İlk atölyemiz sadece
                             60&nbsp;m<sup>2</sup>’ydi ve elimizde birkaç torna tezgâhı ile ikinci el bir boya kabini vardı. Bugün
                             1&nbsp;200&nbsp;m<sup>2</sup>’lik tesisimizde son teknoloji CNC, dyno ve boyahane ekipmanlarıyla
                             çalışıyoruz.
                         </p>
-                        <p className="leading-loose text-gray-900">
+                        <p className="text-black">
                             Kuruluşumuzdan itibaren <em>yarış pistlerinden ilham aldık</em>. Her projede, müşteri beklentisinin ötesine
                             geçmek için kaliteyi standardımız yaptık.
                         </p>
                     </motion.div>
 
                     <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
-                        <Image src="/assets/hero-1.jpg" alt="" width={350} height={350} className="rounded-none object-cover shadow" />
-                        <Image src="/assets/hero-2.jpg" alt="" width={350} height={350} className="rounded-none object-cover shadow translate-y-8" />
+                        <Image src="/assets/hero-1.jpg" alt="" width={350} height={350} className="rounded-none object-cover" />
+                        <Image src="/assets/hero-2.jpg" alt="" width={350} height={350} className="rounded-none object-cover translate-y-8" />
                     </motion.div>
                 </div>
             </section>
 
             {/* ================= İSTATİSTİKLER ================= */}
-                <section className="py-20 bg-gradient-to-r from-red-100 to-white">
+                <section className="py-20 bg-gradient-to-r from-red-100 to-orange-100">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 text-center">
                     {stats.map(({ icon: Icon, label, value }) => (
                         <motion.div key={label} {...fadeUp} className="flex flex-col items-center gap-3">
-                            <Icon size={40} className="text-red-600" />
-                            <span className="text-4xl font-extrabold text-black">
+                            <Icon size={50} className="text-red-700" />
+                            <span className="text-5xl font-extrabold text-red-900" style={{
+                                fontFamily: "JetBrains Mono"
+                            }}>
                 <Counter to={value} duration={2} />
               </span>
-                            <span className="text-gray-600 tracking-wide">{label}</span>
+                            <span className="text-red-950 text-xl font-medium">{label}</span>
                         </motion.div>
                     ))}
                 </div>
@@ -151,9 +159,11 @@ export default function AboutPage() {
 
             {/* ================= HİZMETLER ================= */}
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-                <motion.h2 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-14 text-center">
-                    Başlıca Hizmetlerimiz
-                </motion.h2>
+                <motion.h1 {...fadeUp} className="md:text-4xl font-bold mb-14 text-center" style={{
+                    fontSize: '5rem',
+                }}>
+                    BAŞLICA <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40"> HİZMETLERİMİZ </span>
+                </motion.h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 group">
                     {services.map(({ icon: Icon, title }) => (
@@ -161,12 +171,12 @@ export default function AboutPage() {
                             key={title}
                             {...fadeUp}
                             whileHover={{ y: -6 }}
-                            className="relative bg-white border border-gray-200 rounded-none p-6 shadow-sm overflow-hidden"
+                            className="relative bg-white border border-gray-200 rounded-none p-6 overflow-hidden"
                         >
                             <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-tr from-red-600 to-orange-500 rotate-45 opacity-20" />
                             <Icon size={32} className="text-orange-600 mb-4" />
                             <h3 className="font-semibold text-xl mb-3">{title}</h3>
-                            <p className="text-gray-900 leading-relaxed">
+                            <p className="text-black">
                                 Projenizi <strong>A’dan Z’ye</strong> üstleniyor; tasarım, parça tedariği, montaj ve yol testi dahil
                                 bütün süreçleri kendi bünyemizde tamamlıyoruz.
                             </p>
@@ -184,11 +194,11 @@ export default function AboutPage() {
                 <div className="max-w-6xl mx-auto px-6 md:px-12 grid md:grid-cols-3 gap-10">
                     {[ShieldCheck, Leaf, CheckCircle2].map((Icon, idx) => (
                         <motion.div key={idx} {...fadeUp} className="flex flex-col items-center md:items-start gap-4">
-                            <Icon size={36} />
-                            <h3 className="text-xl font-semibold">
+                            <Icon size={38} />
+                            <h3 className="text-xl font-extrabold">
                                 {idx === 0 ? 'Güvenlik Önceliği' : idx === 1 ? 'Çevre Duyarlılığı' : 'Koşulsuz Garanti'}
                             </h3>
-                            <p className="text-white/90 leading-loose">
+                            <p className="text-white/90">
                                 {idx === 0
                                     ? 'Tüm modifikasyonlarımız TSE ve FIA standartlarına uygundur, yol güvenliğinden taviz vermeyiz.'
                                     : idx === 1
@@ -212,21 +222,21 @@ export default function AboutPage() {
                 >
                     <div className="flex flex-col gap-4">
                         <h3 className="text-2xl font-bold">Uzman ekibimizle tanışın</h3>
-                        <p className="text-gray-900 max-w-md">
+                        <p className="text-black max-w-md">
                             Sizi tesisimizde ağırlamaktan mutluluk duyarız. İhtiyaçlarınızı dinleyelim, size özel yol haritası
                             çıkaralım.
                         </p>
-                        <p className="flex items-center gap-2 text-gray-800">
+                        <p className="flex items-center gap-2 text-black">
                             <MapPin size={18} /> X Mah. Y Cad. No:1/5A Kadıköy / İstanbul
                         </p>
-                        <p className="flex items-center gap-2 text-gray-800">
+                        <p className="flex items-center gap-2 text-black">
                             <PhoneCall size={18} /> 0 (216) 123 45 67
                         </p>
                     </div>
 
                     <a
                         href="/contact"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-700 to-red-700 text-white font-semibold px-8 py-4 rounded-none shadow hover:scale-105 transition pointer-events-auto"
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-700 to-red-700 text-white font-semibold px-8 py-4 rounded-none hover:scale-105 transition pointer-events-auto"
                     >
                         Randevu Al
                     </a>

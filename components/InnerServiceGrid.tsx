@@ -6,15 +6,17 @@ import Link from 'next/link';
 import {FaArrowRight} from "react-icons/fa";
 
 export const services = [
-    { slug: 'engine-mod',        title: 'ENGINE MOD',        cat: 'TUNING',      img: '/assets/hero-1.jpg' },
-    { slug: 'oil-replace',       title: 'OIL REPLACE',       cat: 'MAINTENANCE', img: '/assets/hero-2.jpg' },
-    { slug: 'spare-parts',       title: 'SPARE PARTS',       cat: 'ORIGINAL',    img: '/assets/hero-3.jpg' },
-    { slug: 'paint-finish',      title: 'PAINT & FINISH',    cat: 'COSMETICS',   img: '/assets/hero-4.jpg' },
-    { slug: 'brake-services',    title: 'BRAKE SERVICES',    cat: 'TUNING',      img: '/assets/hero-3.jpg' },
-    { slug: 'tire-services',     title: 'TIRE SERVICES',     cat: 'MAINTENANCE', img: '/assets/hero-4.jpg' },
-    { slug: 'transmission',      title: 'TRANSMISSION\nSERVICES', cat: 'ORIGINAL', img: '/assets/hero-2.jpg' },
-    { slug: 'suspension',        title: 'SUSPENSION',        cat: 'COSMETICS',   img: '/assets/hero-1.jpg' },
+    { slug: 'ceramic-coating',       title: 'SERAMİK KAPLAMA',       cat: 'KORUMA',     img: '/assets/hero-1.jpg' },
+    { slug: 'ppf',                   title: 'BOYA KORUMA\nFİLMİ',    cat: 'KORUMA',     img: '/assets/hero-2.jpg' },
+    { slug: 'interior-detailing',    title: 'İÇ DETAYLANDIRMA',      cat: 'DETAY',      img: '/assets/hero-3.jpg' },
+    { slug: 'exterior-detailing',    title: 'DIŞ DETAYLANDIRMA',     cat: 'DETAY',      img: '/assets/hero-4.jpg' },
+    { slug: 'engine-wash',           title: 'MOTOR YIKAMA',          cat: 'BAKIM',      img: '/assets/hero-3.jpg' },
+    { slug: 'polishing',             title: 'CİLALAMA',              cat: 'KOZMETİK',   img: '/assets/hero-4.jpg' },
+    { slug: 'window-tint',           title: 'CAM FİLMİ',             cat: 'KOZMETİK',   img: '/assets/hero-2.jpg' },
+    { slug: 'headlight-restoration', title: 'FAR\nYENİLEME',         cat: 'BAKIM',      img: '/assets/hero-1.jpg' },
 ];
+
+
 
 export default function InnerServicesGrid() {
     return (
@@ -72,12 +74,9 @@ function ServiceCard({ service }: { service: (typeof services)[number] }) {
                     href={`/services/${service.slug}`}
                     className="inline-flex items-center justify-between w-40 px-4 py-3 text-md text-white hover:border-transparent group/button transition-all duration-300 hover:bg-gradient-to-r border-2 border-white hover:from-orange-800 hover:to-red-700 hover:text-white font-bold"
                 >
-                    DETAILS
+                    DETAYLAR
                     <motion.span
-                        variants={{
-                            initial: { x: 0 },
-                            hover:   { x: 10 },
-                        }}
+                        variants={{ initial: { x: 0 }, hover: { x: 10 } }}
                         transition={{ type: 'spring', stiffness: 250, damping: 20 }}
                         className="inline-block pr-4"
                     >

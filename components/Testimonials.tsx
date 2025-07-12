@@ -6,19 +6,19 @@ import { FaQuoteLeft, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const testimonials = [
     {
-        text: "Mechano’s warranty gave me peace of mind. Their reliable services have kept my car running flawlessly for years. Wouldn’t go anywhere else!",
+        text: 'Mechano’nun garantisi içimi rahatlattı. Güvenilir hizmetleri sayesinde aracım yıllardır sorunsuz çalışıyor. Başka yere gitmem!',
         author: 'Jennifer Dust',
-        role: 'HR – Archy CO.',
+        role: 'İK – Archy CO.',
     },
     {
-        text: "Incredible attention to detail and top-notch support. Mechano’s team made me feel confident in every repair.",
+        text: 'Detaylara inanılmaz özen ve birinci sınıf destek. Mechano ekibi her onarımda bana güven verdi.',
         author: 'Leo Marshall',
-        role: 'Fleet Manager',
+        role: 'Filo Yöneticisi',
     },
     {
-        text: "Fast, reliable, and professional. It’s refreshing to work with a company that actually delivers on its promises.",
+        text: 'Hızlı, güvenilir ve profesyonel. Verdikleri sözü gerçekten yerine getiren bir ekiple çalışmak harika.',
         author: 'Sandra Klein',
-        role: 'Project Engineer',
+        role: 'Proje Mühendisi',
     },
 ];
 
@@ -54,25 +54,24 @@ export default function Testimonials() {
                     className="flex-1"
                 >
                     <h5 className="uppercase tracking-widest text-yellow-400 text-sm mb-2">
-                        TESTIMONIALS
+                        SİZDEN GELENLER
                     </h5>
                     <div className="h-[2px] w-20 bg-yellow-400 mb-6"></div>
 
                     <h1 className="text-4xl md:text-5xl font-display font-extrabold leading-tight">
-                        WHAT OUR<br /> <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
-              CLIENTS SAY
-            </span><br /> ABOUT US.
+                        DEĞERLİ <br /> <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
+              MÜŞTERİLERİMİZ
+            </span><br /> NE DİYOR?
                     </h1>
                     <p className="mt-6 text-gray-300 max-w-md">
-                        Welcome to Mechano testimonials—genuine experiences, trusted service,
-                        quality, and customer satisfaction!
+                        Mechano müşteri yorumlarına hoş geldiniz—gerçek deneyimler, güvenilir hizmet ve koşulsuz memnuniyet!
                     </p>
 
                     <a
                         href="/contact"
                         className="mt-8 inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white hover:bg-white hover:text-black transition"
                     >
-                        Get in Touch
+                        İletişime Geç
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-4 w-4"

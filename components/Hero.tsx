@@ -10,35 +10,36 @@ import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/effect-fade';
+import Link from "next/link";
 
 const slides = [
     {
         id: 1,
-        title: 'Smooth Rides, Superior Service.',
-        text: `From diagnostics to delivery, we ensure every service leaves your car smoother, safer, and stronger. Trust Mechano for quality that moves you.`,
+        title: 'Pürüzsüz Sürüş, Üstün Hizmet.',
+        text: `Diagnostikten teslimata kadar her aşamada aracınızı daha pürüzsüz, güvenli ve güçlü kılıyoruz. Kalite için Mechano’ya güvenin.`,
         image: '/assets/hero-1.jpg',
-        highlight: 'Smooth',
+        highlight: 'Pürüzsüz',
     },
     {
         id: 2,
-        title: 'Engineered for Performance.',
-        text: `Precision tuning, expert upgrades, and cutting-edge diagnostics—because true performance is never an accident. It’s engineered.`,
+        title: 'Performans İçin Tasarlandı.',
+        text: `Hassas ayar, uzman yükseltmeler ve ileri seviye diagnostik—çünkü gerçek performans tesadüf değildir; tasarlanır.`,
         image: '/assets/hero-2.jpg',
-        highlight: 'Engineered',
+        highlight: 'Performans',
     },
     {
         id: 3,
-        title: 'Drive Confidently.',
-        text: `From thorough inspections to reliable repairs, we keep your car road-ready and you worry-free. Confidence starts with Mechano.`,
+        title: 'Güvenle Sürün.',
+        text: `Detaylı kontrollerden güvenilir onarımlara kadar, yolculuklarınızı sorunsuz kılıyoruz. Güven Mechano ile başlar.`,
         image: '/assets/hero-3.jpg',
-        highlight: 'Drive',
+        highlight: 'Güvenle',
     },
     {
         id: 4,
-        title: 'Style Meets Power.',
-        text: `Custom paint, detailing, and tuning that reflect your personality. Where performance meets design—only at Mechano.`,
+        title: 'Stil ve Güç Buluşuyor.',
+        text: `Kişisel tarzınızı yansıtan kaplama, detaylandırma ve tuning. Performans ile tasarımın kesişim noktası: Mechano.`,
         image: '/assets/hero-4.jpg',
-        highlight: 'Style',
+        highlight: 'Stil',
     },
 ];
 
@@ -123,7 +124,7 @@ export default function Hero() {
                                         whileTap={{ scale: 0.95 }}
                                         className="mt-6 px-6 cursor-pointer py-2 rounded-none border border-white bg-transparent text-white hover:bg-white hover:text-black transition"
                                     >
-                                        Details
+                                        <Link href="#servicesIntro">Daha Fazla Bilgi Edinin</Link>
                                     </motion.button>
                                     </div>
                                 </div>

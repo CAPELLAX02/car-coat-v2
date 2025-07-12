@@ -6,7 +6,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 export default function OurServicesIntro() {
     return (
-        <section className="bg-white py-24 overflow-hidden">
+        <section className="bg-white py-24 overflow-hidden" id="servicesIntro">
             <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
                 {/* Sol Başlık Alanı */}
@@ -17,7 +17,7 @@ export default function OurServicesIntro() {
                         transition={{ duration: 0.6 }}
                         className="text-red-600 text-sm font-semibold tracking-widest uppercase"
                     >
-                        Our Services
+                        Hizmetlerimiz
                     </motion.h5>
 
                     <motion.div
@@ -33,11 +33,10 @@ export default function OurServicesIntro() {
                         transition={{ duration: 0.6 }}
                         className="text-5xl md:text-7xl font-display font-extrabold leading-tight uppercase"
                     >
-                        We{' '}
+                        BU ALANLARDA{' '}
                         <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
-              Specialize
-            </span>{' '}
-                        in These Fields
+                        UZMANIZ.
+                      </span>
                     </motion.h1>
                 </div>
 
@@ -49,7 +48,7 @@ export default function OurServicesIntro() {
                         transition={{ duration: 1 }}
                         className="text-gray-600 text-sm leading-relaxed"
                     >
-                        Welcome to Mechano Services, where precision, innovation, and expertise come together to serve you. We provide top-tier automotive services tailored to your needs and vehicle’s performance.
+                        Mechano’ya hoş geldiniz! Hassasiyet, yenilik ve uzmanlığın buluştuğu noktadayız. İhtiyaçlarınıza ve aracınızın performansına uygun üst düzey çözümler sunuyoruz.
                     </motion.p>
 
                     <motion.div
@@ -62,7 +61,7 @@ export default function OurServicesIntro() {
                             href="/services"
                             className="inline-flex p-3 items-center gap-2 text-md group-hover:gap-x-8 font-semibold transition-all duration-200"
                         >
-                            View All Services <ArrowUpRight className="w-5 h-5" />
+                            Tüm Hizmetleri Gör <ArrowUpRight className="w-5 h-5" />
                         </Link>
                     </motion.div>
                 </div>

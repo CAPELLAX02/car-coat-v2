@@ -1,9 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {FiFacebook, FiInstagram, FiPhone, FiTwitter, FiYoutube} from 'react-icons/fi';
+import {
+    FiFacebook,
+    FiInstagram,
+    FiPhone,
+    FiTwitter,
+    FiYoutube,
+} from 'react-icons/fi';
 import { Typewriter } from 'react-simple-typewriter';
-import {FaWhatsapp} from "react-icons/fa";
+import { FaWhatsapp } from 'react-icons/fa';
 
 export default function ContactPage() {
     return (
@@ -14,12 +20,12 @@ export default function ContactPage() {
                 style={{ backgroundImage: "url('/assets/hero-4.jpg')" }}
             />
 
-            <div className="bg-gradient-to-r from-orange-700 to-red-700 h-12"></div>
+            <div className="bg-gradient-to-r from-orange-700 to-red-700 h-12" />
 
             {/* Contact Content */}
             <section className="bg-white pt-20 pb-40">
                 <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-                    {/* Left Text */}
+                    {/* Sol Metin */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -27,16 +33,15 @@ export default function ContactPage() {
                     >
                         <h1 className="text-6xl font-display font-black text-black-800 mb-6">
                             <Typewriter
-                                words={["LET’S"]}
+                                words={["BİZE"]}
                                 loop={1}
                                 cursor={false}
                                 typeSpeed={100}
                             />
                             <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text">
                             <Typewriter
-                                words={[" TALK!"]}
+                                words={[" ULAŞIN."]}
                                 loop={1}
-                                cursor
                                 cursorStyle="|"
                                 typeSpeed={300}
                                 delaySpeed={0}
@@ -51,7 +56,10 @@ export default function ContactPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.6 }}
                         >
-                            Welcome to Mechano! Feel free to contact us anytime.
+                            Mechano Araç Kaplama Dünyası’na hoş geldiniz! Kaplama
+                            seçeneklerimiz, boya koruma filmlerimiz ve kişiye özel tasarım
+                            hizmetlerimiz hakkında merak ettiğiniz her şey için 7/24
+                            yanınızdayız.
                         </motion.p>
 
                         <motion.div
@@ -60,9 +68,11 @@ export default function ContactPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.6 }}
                         >
-                            <p className="font-semibold text-black-800">Call Us</p>
+                            <p className="font-semibold text-black-800">
+                                Bizi Arayın
+                            </p>
                             <p className="text-lg font-medium text-black-800 mt-1 flex items-center gap-2">
-                                <FiPhone /> +12 9887 234 199
+                                <FiPhone /> 0&nbsp;(212)&nbsp;123&nbsp;45&nbsp;67
                             </p>
 
                             {/* Social Media Buttons */}
@@ -105,7 +115,7 @@ export default function ContactPage() {
                         </motion.div>
                     </motion.div>
 
-                    {/* Contact Form */}
+                    {/* İletişim Formu */}
                     <motion.form
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -114,24 +124,24 @@ export default function ContactPage() {
                     >
                         <input
                             type="text"
-                            placeholder="Name"
+                            placeholder="Adınız Soyadınız"
                             className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm"
                         />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="E-posta Adresiniz"
                             className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm"
                         />
                         <textarea
                             rows={5}
-                            placeholder="Your Message"
+                            placeholder="Mesajınız"
                             className="border-b border-gray-500 py-3 focus:outline-none focus:border-gray-800 placeholder:text-sm resize-none"
                         />
                         <button
                             type="submit"
                             className="cursor-pointer w-fit px-6 py-3 mt-2 bg-gray-800 text-white hover:bg-orange-600 transition-all duration-300"
                         >
-                            Submit
+                            Gönder
                         </button>
                     </motion.form>
                 </div>
