@@ -1,7 +1,6 @@
-// app/(site)/services/[slug]/page.tsx
+import { notFound } from 'next/navigation';
 import ServicePage from '@/components/ServicePage';
 import { services } from '@/data/services';
-import {notFound} from "next/navigation";
 
 export async function generateStaticParams() {
     return services.map(({ slug }) => ({ slug }));
@@ -10,9 +9,11 @@ export async function generateStaticParams() {
 export default async function DynamicServicePage({
                                                      params,
                                                  }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }) {
-    const service = services.find((s) => s.slug === params.slug);
+    const { slug } = await params;
+
+    const service = services.find((s) => s.slug === slug);
     if (!service) notFound();
 
     return (
