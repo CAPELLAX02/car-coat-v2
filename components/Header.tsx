@@ -56,7 +56,7 @@ export default function Header() {
                             ANA SAYFA
                         </Link>
 
-                        <Link href="#warrantyCheck" className={linkClass(scrolled)}>
+                        <Link href="/#warrantyCheck" className={linkClass(scrolled)}>
                             GARANTİ SORGULAMA
                         </Link>
 
