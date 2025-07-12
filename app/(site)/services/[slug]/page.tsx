@@ -1,8 +1,17 @@
-import { notFound } from 'next/navigation';
+// app/(site)/services/[slug]/page.tsx
 import ServicePage from '@/components/ServicePage';
-import { services } from '@/data/services'; // yeni yol
+import { services } from '@/data/services';
+import {notFound} from "next/navigation";
 
-export default function DynamicServicePage({ params }: { params: { slug: string } }) {
+export async function generateStaticParams() {
+    return services.map(({ slug }) => ({ slug }));
+}
+
+export default async function DynamicServicePage({
+                                                     params,
+                                                 }: {
+    params: { slug: string };
+}) {
     const service = services.find((s) => s.slug === params.slug);
     if (!service) notFound();
 
@@ -14,8 +23,4 @@ export default function DynamicServicePage({ params }: { params: { slug: string 
             features={service.features}
         />
     );
-}
-
-export function generateStaticParams() {
-    return services.map(({ slug }) => ({ slug }));
 }
