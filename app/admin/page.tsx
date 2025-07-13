@@ -1,247 +1,495 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Fragment, useEffect, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import {
+    PencilIcon,
+    TrashIcon,
+    XMarkIcon,
+    ExclamationTriangleIcon,
+} from '@heroicons/react/24/outline';
+import { services as serviceDefs } from '@/data/services';
+import { motion, AnimatePresence } from 'framer-motion';
+import clsx from "clsx";
 
+/* ---------- Tipler ---------- */
 type Kayit = {
     plakaNo: string;
-    garanti: {
-        baslangic: string;
-        bitis: string
-    };
+    garanti: { baslangic: string; bitis: string };
     notlar: string;
     islemler: string[];
     tarih: string;
     custom?: boolean;
 };
 
-const BASE_CODE_NUM = 2378561284420001n;
-const BASE_CODE_FMT = '2378 5612 8442 0001';
-const initialServices = [
-    'Cam Filmi Hizmeti',
-    'Seramik Kaplama Hizmeti',
-    'PPF Kaplama Hizmeti',
-    'Renk Değişim Hizmeti',
-];
+/* ---------- Sabitler ---------- */
+const BASE_NUM = 2378561284420001n;
+const BASE_FMT = '2378 5612 8442 0001';
+const initialServices = serviceDefs.map((s) => s.title);
 
+/* ---------- Mini Toast Sistemi ---------- */
+function useToast() {
+    const [toasts, setToasts] = useState<{ id: number; msg: string }[]>([]);
+    return {
+        ToastContainer: () => (
+            <div className="fixed top-6 right-6 space-y-3 z-[9999]">
+                <AnimatePresence>
+                    {toasts.map(({ id, msg }) => (
+                        <motion.div
+                            key={id}
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="bg-black text-white px-4 py-2 rounded shadow"
+                        >
+                            {msg}
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
+        ),
+        push: (msg: string) =>
+            setToasts((t) => [...t, { id: Date.now(), msg }]) &&
+            setTimeout(() => setToasts((t) => t.slice(1)), 3000),
+    };
+}
 
+/* ---------- Onay Diyaloğu ---------- */
+function ConfirmDialog({
+                           open,
+                           onClose,
+                           onConfirm,
+                           title,
+                           message,
+                       }: {
+    open: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    title: string;
+    message: string;
+}) {
+    return (
+        <Transition appear show={open} as={Fragment}>
+            <Dialog as="div" className="relative z-50" onClose={onClose}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-200"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black/40" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 flex items-center justify-center p-4">
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-200"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="ease-in duration-100"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
+                    >
+                        <Dialog.Panel className="w-full max-w-sm rounded bg-white p-6 space-y-4 shadow-xl">
+                            <Dialog.Title className="text-lg font-bold flex items-center gap-2">
+                                <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+                                {title}
+                            </Dialog.Title>
+                            <p className="text-sm text-gray-700">{message}</p>
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={onClose}
+                                    className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300"
+                                >
+                                    Vazgeç
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        onConfirm();
+                                        onClose();
+                                    }}
+                                    className="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700"
+                                >
+                                    Sil
+                                </button>
+                            </div>
+                        </Dialog.Panel>
+                    </Transition.Child>
+                </div>
+            </Dialog>
+        </Transition>
+    );
+}
+
+/* ------------------------------------------------------------------ */
 export default function AdminPage() {
+    /* --- durumlar --- */
     const [token, setToken] = useState<string | null>(null);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [records, setRecords] = useState<[string, Kayit][]>([]);
     const [services, setServices] = useState<string[]>(initialServices);
-    const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
-    const [newService, setNewService] = useState('');
+    const [selected, setSelected] = useState<Set<string>>(new Set());
+    const [newSrv, setNewSrv] = useState('');
 
     const [code, setCode] = useState('');
     const [isCustom, setIsCustom] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const [successMsg, setSuccessMsg] = useState('');
+    const [confirm, setConfirm] = useState<{ kod: string } | null>(null);
 
-    const [plakaNo, setPlakaNo] = useState('');
-    const [garantiBaslangic, setGarantiBaslangic] = useState('');
-    const [garantiBitis, setGarantiBitis] = useState('');
-    const [notlar, setNotlar] = useState('');
+    const [plaka, setPlaka] = useState('');
+    const [gStart, setGStart] = useState('');
+    const [gEnd, setGEnd] = useState('');
+    const [note, setNote] = useState('');
 
-    useEffect(() => {
-        const t = localStorage.getItem('adminToken');
-        if (t) { setToken(t); fetchAll(t); }
-    }, []);
+    /* toast hook */
+    const { ToastContainer, push } = useToast();
 
-    const formatKod = (raw: string) =>
+    /* --- yardımcı fonksiyonlar --- */
+    const fmt = (raw: string) =>
         raw.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
 
-    const calculateNextKod = (entries: [string, Kayit][]) => {
-        if (!entries.length) return BASE_CODE_FMT;
+    const nextKod = (entries: [string, Kayit][]) => {
+        if (!entries.length) return BASE_FMT;
         const used = new Set(entries.map(([k]) => k.replace(/\s/g, '')));
-
-        const lastAuto = entries
+        const last = entries
             .filter(([, v]) => v.custom === false)
-            .reduce<bigint>((max, [k]) => {
-                const num = BigInt(k.replace(/\s/g, ''));
-                return num > max ? num : max;
+            .reduce<bigint>((m, [k]) => {
+                const n = BigInt(k.replace(/\s/g, ''));
+                return n > m ? n : m;
             }, 0n);
-
-        let next = lastAuto >= BASE_CODE_NUM ? lastAuto + 1n : BASE_CODE_NUM;
-        while (used.has(next.toString().padStart(16, '0'))) next++;
-
-        return formatKod(next.toString().padStart(16, '0'));
+        let nxt = last >= BASE_NUM ? last + 1n : BASE_NUM;
+        while (used.has(nxt.toString().padStart(16, '0'))) nxt++;
+        return fmt(nxt.toString().padStart(16, '0'));
     };
 
+    /* --- ilk açılışta token kontrolü --- */
     useEffect(() => {
-        const storedToken = localStorage.getItem('adminToken');
-        if (storedToken) {
-            setToken(storedToken);
-            fetchAll(storedToken);
+        const t = localStorage.getItem('adminToken');
+        if (t) {
+            setToken(t);
+            fetchAll(t);
         }
     }, []);
 
+    /* --- API çağrıları --- */
     const fetchAll = async (tkn: string) => {
         try {
-            const res = await fetch('/api/admin/kod-tum', {
-                headers: { Authorization: `Bearer ${tkn}` }
+            const r = await fetch('/api/admin/kod-tum', {
+                headers: { Authorization: `Bearer ${tkn}` },
             });
-            const data = await res.json();
+            if (!r.ok) throw new Error();
+            const data = await r.json();
             const entries = Object.entries(data || {}) as [string, Kayit][];
             setRecords(entries);
-            setCode(calculateNextKod(entries));
-        } catch (err) {
-            alert("Veriler alınırken hata oluştu.");
+            setCode(nextKod(entries));
+        } catch {
+            push('Veriler alınamadı');
         }
     };
 
-
-    const login = () => {
-        fetch('/api/admin/login',{
-            method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({username,password})
-        }).then(r=>r.json()).then(d=>{
+    const login = async () => {
+        try {
+            const r = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+            const d = await r.json();
             if (d.token) {
                 localStorage.setItem('adminToken', d.token);
                 setToken(d.token);
                 fetchAll(d.token);
-            } else alert(d.message);
-        });
+                push('Giriş başarılı');
+            } else push(d.message || 'Giriş başarısız');
+        } catch {
+            push('Sunucu hatası');
+        }
     };
 
-    const logout = () => {
-        localStorage.removeItem('adminToken');
-        setToken(null); setRecords([]); resetForm();
-    };
+    const submit = async () => {
+        if (!/^(\d{4} ){3}\d{4}$/.test(code))
+            return push('Kod 16 haneli olmalı');
+        if (!plaka || !gStart || !gEnd || selected.size === 0)
+            return push('Zorunlu alanları doldurun');
 
-    const resetForm = () => {
-        setEditMode(false);
-        setPlakaNo(''); setGarantiBaslangic(''); setGarantiBitis(''); setNotlar('');
-        setSelectedServices(new Set()); setIsCustom(false);
-        setCode(calculateNextKod(records));
-    };
-
-    const submit = () => {
-        if (!/^(\d{4} ){3}\d{4}$/.test(code)) return alert('16 haneli kod girin.');
-        if (!plakaNo||!garantiBaslangic||!garantiBitis||selectedServices.size===0)
-            return alert('Gerekli alanları doldurun.');
         const body = {
-            kod: code.replace(/\s/g,''),
-            plakaNo,garantiBaslangic,garantiBitis,
-            notlar,islemler:Array.from(selectedServices),custom:isCustom
+            kod: code.replace(/\s/g, ''),
+            plakaNo: plaka,
+            garantiBaslangic: gStart,
+            garantiBitis: gEnd,
+            notlar: note,
+            islemler: Array.from(selected),
+            custom: isCustom,
         };
-        const url = editMode? '/api/admin/kod-guncelle':'/api/admin/kod-kaydet';
-        fetch(url,{
-            method: editMode?'PUT':'POST',
-            headers:{
-                'Content-Type':'application/json',
-                Authorization:`Bearer ${token}`
-            },body: JSON.stringify(body)
-        }).then(r=>r.ok? fetchAll(token!): r.json().then(j=>alert(j.message)));
-        setSuccessMsg(editMode?'Güncellendi!':'Kaydedildi!');
-        setTimeout(()=> setSuccessMsg(''),2000);
+
+        const url = editMode ? '/api/admin/kod-guncelle' : '/api/admin/kod-kaydet';
+        try {
+            const r = await fetch(url, {
+                method: editMode ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(body),
+            });
+            if (!r.ok) throw new Error();
+            await fetchAll(token!);
+            reset();
+            push(editMode ? 'Kayıt güncellendi' : 'Kayıt eklendi');
+        } catch {
+            push('İşlem başarısız');
+        }
     };
 
-    const edit = (kod:string, v:Kayit) => {
-        setEditMode(true); setIsCustom(true);
-        setCode(formatKod(kod));
-        setPlakaNo(v.plakaNo); setGarantiBaslangic(v.garanti.baslangic);
-        setGarantiBitis(v.garanti.bitis); setNotlar(v.notlar);
-        setSelectedServices(new Set(v.islemler));
+    const remove = async (kod: string) => {
+        try {
+            const r = await fetch(`/api/admin/kod-sil?kod=${kod}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!r.ok) throw new Error();
+            fetchAll(token!);
+            push('Silindi');
+        } catch {
+            push('Silme hatası');
+        }
     };
 
-    const remove = (kod:string) => {
-        if (!confirm('Silinsin mi?')) return;
-        fetch(`/api/admin/kod-sil?kod=${kod}`,{
-            method:'DELETE',headers:{Authorization:`Bearer ${token}`}
-        }).then(()=>fetchAll(token!));
+    /* --- yardımcılar --- */
+    const reset = () => {
+        setEditMode(false);
+        setPlaka('');
+        setGStart('');
+        setGEnd('');
+        setNote('');
+        setSelected(new Set());
+        setIsCustom(false);
+        setCode(nextKod(records));
     };
 
+    const edit = (kod: string, v: Kayit) => {
+        setEditMode(true);
+        setIsCustom(true);
+        setCode(fmt(kod));
+        setPlaka(v.plakaNo);
+        setGStart(v.garanti.baslangic);
+        setGEnd(v.garanti.bitis);
+        setNote(v.notlar);
+        setSelected(new Set(v.islemler));
+    };
+
+    /* ----------------------- JSX ----------------------- */
     return (
         <div className="min-h-screen bg-gray-50 p-4">
-            {!token ? (
-                <div className="max-w-md mx-auto bg-white shadow rounded p-6 mt-20">
-                    <h2 className="text-2xl font-semibold mb-4 text-center">Admin Girişi</h2>
-                    <input type="text" className="w-full mb-3 px-3 py-2 border rounded" placeholder="Kullanıcı Adı" value={username} onChange={e=>setUsername(e.target.value)}/>
-                    <input type="password" className="w-full mb-5 px-3 py-2 border rounded" placeholder="Şifre" value={password} onChange={e=>setPassword(e.target.value)}/>
-                    <button onClick={login} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Giriş Yap</button>
+            <ToastContainer />
+
+            {/* --------- LOGIN --------- */}
+            {!token && (
+                <div className="max-w-md mx-auto bg-gray-200 p-6 shadow rounded mt-20">
+                    <h2 className="text-2xl font-semibold text-center mb-4">
+                        Yönetici Girişi
+                    </h2>
+                    <input
+                        className="w-full px-3 py-2 border-none bg-white rounded mb-3"
+                        placeholder="Kullanıcı Adı"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        className="w-full px-3 py-2 border-none bg-white rounded mb-5"
+                        placeholder="Şifre"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                        onClick={login}
+                        className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-800 transition-colors duration-200 cursor-pointer"
+                    >
+                        Giriş Yap
+                    </button>
                 </div>
-            ) : (
-                <div>
-                    <header className="flex justify-between items-center bg-white p-4 shadow">
-                        <h2 className="text-xl font-bold">Mechano Yönetici Paneli</h2>
-                        <button onClick={logout} className="text-red-600 hover:underline">Çıkış Yap</button>
+            )}
+
+            {/* --------- PANEL --------- */}
+            {token && (
+                <>
+                    <header className="bg-white shadow">
+                        {/* ► Ortalanmış, 7xl genişlikte flex konteyner */}
+                        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+                            <h2 className="text-2xl font-semibold text-gray-800">Mechano Yönetici Paneli</h2>
+
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('adminToken');
+                                    setToken(null);
+                                }}
+                                className="px-4 py-1 rounded-sm border-2 border-red-700 cursor-pointer text-red-700 hover:bg-red-700 hover:text-white transition-colors duration-200"
+                            >
+                                Çıkış Yap
+                            </button>
+                        </div>
                     </header>
 
-                    <main className="mt-6 max-w-4xl mx-auto bg-white p-6 rounded shadow">
-                        {successMsg && <div className="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">{successMsg}</div>}
+
+                    <main className="max-w-7xl mx-auto mt-6 bg-white p-6 rounded shadow">
+                        {/* Form */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Kod */}
                             <div>
-                                <label className="block mb-1">Müşteri Kodu</label>
-                                <input value={code} onChange={e=>isCustom && setCode(formatKod(e.target.value))}
-                                       className="w-full px-3 py-2 border rounded bg-gray-100"
-                                       readOnly={!isCustom}/>
+                                <label>Müşteri Kodu (16 Haneli)</label>
+                                <input
+                                    value={code}
+                                    placeholder="0000 0000 0000 0000"
+                                    onChange={(e) => isCustom && setCode(fmt(e.target.value))}
+                                    className={clsx(
+                                        "w-full px-3 py-2 border rounded font-semibold border-gray-400",
+                                        !isCustom && "cursor-not-allowed bg-gray-200"
+                                    )}
+                                    readOnly={!isCustom}
+                                />
+                                <p className="text-gray-600 pt-2">🛈 Sistemdeki son müşteri kodu algılandı ve sıradaki kod otomatik olarak üretildi.</p>
+                                <p className="text-gray-600 pt-2">🛈 Sıralı kod yerine kendi belirleyeceğiniz bir müşteri kodu tanımlamak istiyorsanız, lütfen alttaki kutucuğu işaretleyin ve alanı elle doldurun.</p>
                                 <label className="inline-flex items-center mt-2">
-                                    <input type="checkbox" className="mr-2" checked={isCustom} onChange={e=>{setIsCustom(e.target.checked); resetForm();}}/>
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={isCustom}
+                                        onChange={(e) => {
+                                            setIsCustom(e.target.checked);
+                                            if (!e.target.checked) reset();
+                                        }}
+                                    />
                                     Özel Kod
                                 </label>
                             </div>
+
                             <div>
-                                <label>Plaka No</label>
-                                <input value={plakaNo} onChange={e=>setPlakaNo(e.target.value)}
-                                       className="w-full px-3 py-2 border rounded"/>
+                                <label>Araç Plaka No.</label>
+                                <input
+                                    value={plaka}
+                                    placeholder="34 ABC 38"
+                                    onChange={(e) => setPlaka(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded border-gray-400"
+                                />
                             </div>
+
                             <div>
-                                <label>Garanti Başlangıç</label>
-                                <input type="date" value={garantiBaslangic} onChange={e=>setGarantiBaslangic(e.target.value)}
-                                       className="w-full px-3 py-2 border rounded"/>
+                                <label>Garanti Başlangıç (<b>ay-gün-yıl</b> cinsinden)</label>
+                                <input
+                                    type="date"
+                                    value={gStart}
+                                    onChange={(e) => setGStart(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded border-gray-400"
+                                />
                             </div>
+
                             <div>
-                                <label>Garanti Bitiş</label>
-                                <input type="date" value={garantiBitis} onChange={e=>setGarantiBitis(e.target.value)}
-                                       className="w-full px-3 py-2 border rounded"/>
+                                <label>Garanti Bitiş (<b>ay-gün-yıl</b> cinsinden)</label>
+                                <input
+                                    type="date"
+                                    value={gEnd}
+                                    onChange={(e) => setGEnd(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded border-gray-400"
+                                />
                             </div>
+
                             <div className="md:col-span-2">
-                                <label>Notlar</label>
-                                <textarea rows={3} value={notlar} onChange={e=>setNotlar(e.target.value)}
-                                          className="w-full px-3 py-2 border rounded"/>
+                                <label>Eklemek İstediğiniz Notlar (Opsiyonel)</label>
+                                <textarea
+                                    rows={3}
+                                    value={note}
+                                    onChange={(e) => setNote(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded border-gray-400"
+                                />
                             </div>
+
+                            {/* Hizmetler */}
                             <div className="md:col-span-2">
                                 <label>Hizmetler</label>
                                 <div className="flex flex-wrap gap-2 mt-2">
-                                    {services.map((s,i)=>
-                                        <label key={i} className="inline-flex items-center bg-gray-100 px-2 py-1 rounded">
-                                            <input type="checkbox" className="mr-1" checked={selectedServices.has(s)}
-                                                   onChange={()=> {
-                                                       const n = new Set(selectedServices);
-                                                       n.has(s)? n.delete(s): n.add(s);
-                                                       setSelectedServices(n);
-                                                   }}/>
+                                    {services.map((s) => (
+                                        <label
+                                            key={s}
+                                            className="inline-flex items-center bg-gray-100 px-2 py-1 rounded"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                className="mr-1 border-gray-400"
+                                                checked={selected.has(s)}
+                                                onChange={() => {
+                                                    const n = new Set(selected);
+                                                    n.has(s) ? n.delete(s) : n.add(s);
+                                                    setSelected(n);
+                                                }}
+                                            />
                                             {s}
                                         </label>
-                                    )}
-                                    <input placeholder="Yeni hizmet..." value={newService}
-                                           onChange={e=>setNewService(e.target.value)}
-                                           className="px-2 py-1 border rounded"/>
-                                    <button onClick={()=>{if(newService&&!services.includes(newService)){setServices([...services,newService]); setNewService('');}}}
-                                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Ekle</button>
+                                    ))}
+
+                                    <input
+                                        value={newSrv}
+                                        onChange={(e) => setNewSrv(e.target.value)}
+                                        placeholder="Yeni hizmet..."
+                                        className="px-2 py-1 border rounded border-gray-400"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            const v = newSrv.trim();
+                                            if (v && !services.includes(v)) {
+                                                setServices([...services, v]);
+                                                setNewSrv('');
+                                                push('Hizmet eklendi');
+                                            }
+                                        }}
+                                        className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-800 transition-colors duration-200"
+                                    >
+                                        Yeni Hizmet Ekle
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mt-4 flex justify-end">
-                            <button onClick={resetForm} className="mr-2 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Temizle</button>
-                            <button onClick={submit} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">{editMode? 'Güncelle':'Kaydet'}</button>
+                        {/* Aksiyon butonları */}
+                        <div className="mt-4 flex justify-end gap-2">
+                            <button
+                                onClick={reset}
+                                className="cursor-pointer px-6 py-2 transition-colors duration-200 bg-gray-300 rounded hover:bg-gray-400"
+                            >
+                                Temizle
+                            </button>
+                            <button
+                                onClick={submit}
+                                className="cursor-pointer px-8 py-2 transition-colors duration-200 bg-green-600 text-white rounded hover:bg-green-700"
+                            >
+                                {editMode ? 'Güncelle' : 'Kaydet'}
+                            </button>
                         </div>
 
-                        <hr className="my-6"/>
-
-                        <div className="flex justify-between items-center mb-2">
-                            <h2 className="text-lg font-semibold">Son 5 Kayıt</h2>
-                            {records.length>5 && <button onClick={()=>setModalOpen(true)} className="text-blue-600 hover:underline">Tümünü Gör</button>}
+                        {/* Son Kayıtlar */}
+                        <hr className="my-6" />
+                        <div className="justify-between items-center mb-2">
+                            <h2 className="font-semibold">Son 5 Kayıt</h2>
+                            <p className="py-2 text-gray-500">
+                                🛈 Aşağıda en son eklenen beş müşteri kaydını görüntülüyorsunuz. Kalem simgesiyle kaydı düzenleyebilir, Çöp kutusu simgesiyle silebilirsiniz. Tüm geçmişi incelemek için ise “Tüm Kayıtları Görüntüle” butonunu kullanabilirsiniz.</p>
+                            {records.length > 5 && (
+                                <button
+                                    onClick={() => setModalOpen(true)}
+                                    className="text-blue-700 underline cursor-pointer mb-3"
+                                >
+                                    Tüm Kayıtları Görüntüle
+                                </button>
+                            )}
                         </div>
 
                         <div className="overflow-x-auto">
-                            <table className="min-w-full bg-white">
+                            <table className="min-w-full text-sm">
                                 <thead className="bg-gray-200">
                                 <tr>
                                     <th className="px-3 py-2">Kod</th>
@@ -249,20 +497,38 @@ export default function AdminPage() {
                                     <th className="px-3 py-2">Garanti</th>
                                     <th className="px-3 py-2">Hizmetler</th>
                                     <th className="px-3 py-2">Tarih</th>
+                                    <th className="px-3 py-2">Notlar</th>
                                     <th className="px-3 py-2">İşlem</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {records.slice(0,5).map(([k,v])=>(
+                                {records.slice(0, 5).map(([k, v]) => (
                                     <tr key={k} className="border-t">
                                         <td className="px-3 py-2">{k}</td>
                                         <td className="px-3 py-2">{v.plakaNo}</td>
-                                        <td className="px-3 py-2">{v.garanti.baslangic}→{v.garanti.bitis}</td>
-                                        <td className="px-3 py-2">{v.islemler.join(', ')}</td>
-                                        <td className="px-3 py-2">{new Date(v.tarih).toLocaleString('tr-TR')}</td>
+                                        <td className="px-3 py-2">
+                                            {v.garanti.baslangic}→{v.garanti.bitis}
+                                        </td>
+                                        <td className="px-3 py-2">
+                                            {v.islemler.join(', ')}
+                                        </td>
+                                        <td className="px-3 py-2">
+                                            {new Date(v.tarih).toLocaleString('tr-TR')}
+                                        </td>
+                                        <td className="px-3 py-2">{v.notlar}</td>
                                         <td className="px-3 py-2 space-x-2">
-                                            <button onClick={()=>edit(k,v)} className="text-blue-600 hover:underline"><PencilIcon className="h-5 w-5 inline"/></button>
-                                            <button onClick={()=>remove(k)} className="text-red-600 hover:underline"><TrashIcon className="h-5 w-5 inline"/></button>
+                                            <button
+                                                onClick={() => edit(k, v)}
+                                                className="text-blue-600 hover:underline"
+                                            >
+                                                <PencilIcon className="h-5 w-5 inline" />
+                                            </button>
+                                            <button
+                                                onClick={() => setConfirm({ kod: k })}
+                                                className="text-red-600 hover:underline"
+                                            >
+                                                <TrashIcon className="h-5 w-5 inline" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -271,46 +537,103 @@ export default function AdminPage() {
                         </div>
                     </main>
 
-                    <Dialog open={modalOpen} onClose={()=>setModalOpen(false)} className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-30">
-                        <div className="flex items-center justify-center min-h-screen p-4">
-                            <Dialog.Panel className="bg-white w-full max-w-4xl p-6 rounded-lg shadow">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xl font-semibold">Tüm Kayıtlar</h3>
-                                    <button onClick={()=>setModalOpen(false)}><XMarkIcon className="h-6 w-6"/></button>
-                                </div>
-                                <div className="overflow-x-auto max-h-[60vh]">
-                                    <table className="min-w-full">
-                                        <thead className="bg-gray-200 sticky top-0">
-                                        <tr>
-                                            <th className="px-3 py-2">Kod</th>
-                                            <th className="px-3 py-2">Plaka</th>
-                                            <th className="px-3 py-2">Garanti</th>
-                                            <th className="px-3 py-2">Hizmetler</th>
-                                            <th className="px-3 py-2">Tarih</th>
-                                            <th className="px-3 py-2">İşlem</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {records.map(([k,v])=>(
-                                            <tr key={k} className="border-t">
-                                                <td className="px-3 py-2">{k}</td>
-                                                <td className="px-3 py-2">{v.plakaNo}</td>
-                                                <td className="px-3 py-2">{v.garanti.baslangic}→{v.garanti.bitis}</td>
-                                                <td className="px-3 py-2">{v.islemler.join(', ')}</td>
-                                                <td className="px-3 py-2">{new Date(v.tarih).toLocaleString('tr-TR')}</td>
-                                                <td className="px-3 py-2 space-x-2">
-                                                    <button onClick={()=>{edit(k,v);setModalOpen(false)}} className="text-blue-600 hover:underline"><PencilIcon className="h-5 w-5 inline"/></button>
-                                                    <button onClick={()=>remove(k)} className="text-red-600 hover:underline"><TrashIcon className="h-5 w-5 inline"/></button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </Dialog.Panel>
-                        </div>
-                    </Dialog>
-                </div>
+                    {/* --- Tüm Kayıtlar Modal --- */}
+                    <Transition appear show={modalOpen} as={Fragment}>
+                        <Dialog as="div" className="relative z-50" onClose={() => setModalOpen(false)}>
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-200"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <div className="fixed inset-0 bg-black/40" />
+                            </Transition.Child>
+
+                            <div className="fixed inset-0 flex items-center justify-center p-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-200"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-100"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel className="bg-white w-full max-w-8xl p-6 rounded-lg shadow">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="text-xl font-semibold">Tüm Kayıtlar</h3>
+                                            <button onClick={() => setModalOpen(false)}>
+                                                <XMarkIcon className="h-6 w-6" />
+                                            </button>
+                                        </div>
+                                        <div className="overflow-x-auto max-h-[60vh]">
+                                            <table className="min-w-full text-sm">
+                                                <thead className="bg-gray-200 sticky top-0">
+                                                <tr>
+                                                    <th className="px-3 py-2">Kod</th>
+                                                    <th className="px-3 py-2">Plaka</th>
+                                                    <th className="px-3 py-2">Garanti</th>
+                                                    <th className="px-3 py-2">Hizmetler</th>
+                                                    <th className="px-3 py-2">Tarih</th>
+                                                    <th className="px-3 py-2">Notlar</th>
+                                                    <th className="px-3 py-2">İşlem</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {records.map(([k, v]) => (
+                                                    <tr key={k} className="border-t">
+                                                        <td className="px-3 py-2">{k}</td>
+                                                        <td className="px-3 py-2">{v.plakaNo}</td>
+                                                        <td className="px-3 py-2">
+                                                            {v.garanti.baslangic}→{v.garanti.bitis}
+                                                        </td>
+                                                        <td className="px-3 py-2">{v.islemler.join(', ')}</td>
+                                                        <td className="px-3 py-2">
+                                                            {new Date(v.tarih).toLocaleString('tr-TR')}
+                                                        </td>
+                                                        <td className="px-3 py-2">{v.notlar}</td>
+                                                        <td className="px-3 py-2 space-x-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    edit(k, v);
+                                                                    setModalOpen(false);
+                                                                }}
+                                                                className="text-blue-600 hover:underline"
+                                                            >
+                                                                <PencilIcon className="h-5 w-5 inline" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setConfirm({ kod: k })}
+                                                                className="text-red-600 hover:underline"
+                                                            >
+                                                                <TrashIcon className="h-5 w-5 inline" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition>
+
+                    {/* --- Silme Onayı --- */}
+                    {confirm && (
+                        <ConfirmDialog
+                            open={!!confirm}
+                            onClose={() => setConfirm(null)}
+                            onConfirm={() => remove(confirm.kod)}
+                            title="Kaydı Sil"
+                            message="Bu işlemi geri alamazsınız."
+                        />
+                    )}
+                </>
             )}
         </div>
     );
