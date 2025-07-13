@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import {Fragment, JSX, useEffect, useState} from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
     PencilIcon,
@@ -27,34 +27,70 @@ const BASE_NUM = 2378561284420001n;
 const BASE_FMT = '2378 5612 8442 0001';
 const initialServices = serviceDefs.map((s) => s.title);
 
-/* ---------- Mini Toast Sistemi ---------- */
-function useToast() {
-    const [toasts, setToasts] = useState<{ id: number; msg: string }[]>([]);
-    return {
-        ToastContainer: () => (
-            <div className="fixed top-6 right-6 space-y-3 z-[9999]">
-                <AnimatePresence>
-                    {toasts.map(({ id, msg }) => (
-                        <motion.div
-                            key={id}
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="bg-black text-white px-4 py-2 rounded shadow"
-                        >
-                            {msg}
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
-            </div>
-        ),
-        push: (msg: string) =>
-            setToasts((t) => [...t, { id: Date.now(), msg }]) &&
-            setTimeout(() => setToasts((t) => t.slice(1)), 3000),
-    };
+import {
+    CheckCircleIcon,
+    InformationCircleIcon,
+} from '@heroicons/react/24/outline';
+
+type Variant = 'success' | 'error' | 'info' | 'warning';
+
+interface Toast {
+    id: number;
+    msg: string;
+    variant: Variant;
 }
 
-/* ---------- Onay Diyaloğu ---------- */
+const COLOR: Record<Variant, string> = {
+    success: 'bg-green-600',
+    error:   'bg-red-600',
+    info:    'bg-slate-800',
+    warning: 'bg-amber-500',
+};
+
+const ICON: Record<Variant, JSX.Element> = {
+    success: <CheckCircleIcon       className="h-5 w-5" />,
+    error:   <ExclamationTriangleIcon className="h-5 w-5" />,
+    info:    <InformationCircleIcon className="h-5 w-5" />,
+    warning: <ExclamationTriangleIcon className="h-5 w-5" />,
+};
+
+const useToast = () => {
+    const [toasts, setToasts] = useState<Toast[]>([]);
+
+    const push = (msg: string, variant: Variant = 'info', ms = 3000) => {
+        const id = Date.now();
+        setToasts((t) => [...t, { id, msg, variant }]);
+
+        setTimeout(() => {
+            setToasts((t) => t.filter((x) => x.id !== id));
+        }, ms);
+    };
+
+    const ToastContainer = () => (
+        <div className="fixed top-6 right-6 z-[9999] space-y-2">
+            <AnimatePresence>
+                {toasts.map(({ id, msg, variant }) => (
+                    <motion.div
+                        key={id}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 50 }}
+                        className={`
+              ${COLOR[variant]}
+              text-white px-4 py-2 rounded shadow flex items-center gap-2
+            `}
+                    >
+                        {ICON[variant]}
+                        <span>{msg}</span>
+                    </motion.div>
+                ))}
+            </AnimatePresence>
+        </div>
+    );
+
+    return { push, ToastContainer };
+}
+
 function ConfirmDialog({
                            open,
                            onClose,
@@ -93,16 +129,16 @@ function ConfirmDialog({
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="w-full max-w-sm rounded bg-white p-6 space-y-4 shadow-xl">
+                        <Dialog.Panel className="w-full max-w-lg rounded bg-white py-10 px-8 space-y-6 shadow-2xl">
                             <Dialog.Title className="text-lg font-bold flex items-center gap-2">
-                                <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+                                <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
                                 {title}
                             </Dialog.Title>
                             <p className="text-sm text-gray-700">{message}</p>
                             <div className="flex justify-end gap-3">
                                 <button
                                     onClick={onClose}
-                                    className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300"
+                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300"
                                 >
                                     Vazgeç
                                 </button>
@@ -111,7 +147,7 @@ function ConfirmDialog({
                                         onConfirm();
                                         onClose();
                                     }}
-                                    className="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700"
+                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-sm rounded bg-red-600 text-white hover:bg-red-700"
                                 >
                                     Sil
                                 </button>
@@ -185,10 +221,15 @@ export default function AdminPage() {
             });
             if (!r.ok) throw new Error();
             const data = await r.json();
-            const entries = Object.entries(data || {}) as [string, Kayit][];
+            const entries = (Object.entries(data || {}) as [string, Kayit][])
+                .sort(
+                    (t1, t2) =>
+                        new Date(t2[1].tarih).getTime() - new Date(t1[1].tarih).getTime()
+                )
             setRecords(entries);
             setCode(nextKod(entries));
-        } catch {
+        }
+        catch {
             push('Veriler alınamadı');
         }
     };
@@ -519,15 +560,15 @@ export default function AdminPage() {
                                         <td className="px-3 py-2 space-x-2">
                                             <button
                                                 onClick={() => edit(k, v)}
-                                                className="text-blue-600 hover:underline"
+                                                className="text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
                                             >
-                                                <PencilIcon className="h-5 w-5 inline" />
+                                                <PencilIcon className="h-6 w-6 inline" />
                                             </button>
                                             <button
                                                 onClick={() => setConfirm({ kod: k })}
-                                                className="text-red-600 hover:underline"
+                                                className="text-red-600 hover:scale-110 transition-all duration-200 cursor-pointer"
                                             >
-                                                <TrashIcon className="h-5 w-5 inline" />
+                                                <TrashIcon className="h-6 w-6 inline" />
                                             </button>
                                         </td>
                                     </tr>
@@ -629,8 +670,8 @@ export default function AdminPage() {
                             open={!!confirm}
                             onClose={() => setConfirm(null)}
                             onConfirm={() => remove(confirm.kod)}
-                            title="Kaydı Sil"
-                            message="Bu işlemi geri alamazsınız."
+                            title={`${code} Numaralı Kaydı Sil`}
+                            message="Kayıt silme işlemi geri alınamaz."
                         />
                     )}
                 </>
