@@ -129,16 +129,16 @@ function ConfirmDialog({
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="w-full max-w-lg rounded bg-white py-10 px-8 space-y-6 shadow-2xl">
+                        <Dialog.Panel className="w-full max-w-md rounded bg-white p-7 space-y-5 shadow-2xl">
                             <Dialog.Title className="text-lg font-bold flex items-center gap-2">
                                 <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
                                 {title}
                             </Dialog.Title>
-                            <p className="text-sm text-gray-700">{message}</p>
+                            <p className="text-md text-gray-700">{message}</p>
                             <div className="flex justify-end gap-3">
                                 <button
                                     onClick={onClose}
-                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300"
+                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-md rounded bg-gray-200 hover:bg-gray-300"
                                 >
                                     Vazgeç
                                 </button>
@@ -147,7 +147,7 @@ function ConfirmDialog({
                                         onConfirm();
                                         onClose();
                                     }}
-                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-sm rounded bg-red-600 text-white hover:bg-red-700"
+                                    className="cursor-pointer transition-colors duration-200 px-5 py-2 text-md rounded bg-red-600 text-white hover:bg-red-700"
                                 >
                                     Sil
                                 </button>
@@ -182,6 +182,59 @@ export default function AdminPage() {
     const [gStart, setGStart] = useState('');
     const [gEnd, setGEnd] = useState('');
     const [note, setNote] = useState('');
+
+    /* --- filtre state'leri --- */
+    const [fltPlaka,    setFltPlaka]    = useState('');
+    const [fltKodLast4, setFltKodLast4] = useState('');
+    const [fltService,  setFltService]  = useState<string[]>([]);
+    const [fltKeywords, setFltKeywords] = useState('');
+    const [fltActive,   setFltActive]   = useState<'all' | 'active' | 'expired'>('all');
+    const [newFilterSrv, setNewFilterSrv] = useState(''); // “yeni hizmet” input’u
+
+    /* --- yardım: garanti aktif mi? --- */
+    const isActive = (v: Kayit) =>
+        new Date(v.garanti.bitis).getTime() >= Date.now();
+
+    const filtered = records.filter(([kod, v]) => {
+        /* 1) plaka  */
+        if (fltPlaka && !v.plakaNo.toLowerCase().includes(fltPlaka.toLowerCase()))
+            return false;
+
+        /* 2) müşteri kodu */
+        if (fltKodLast4 && !kod.endsWith(fltKodLast4.replace(/\s/g, '')))
+            return false;
+
+        /* 3) hizmetler (OR mantığı) */
+        if (fltService.length && !fltService.some((s) => v.islemler.includes(s)))
+            return false;
+
+        /* 4) notlarda anahtar kelime  */
+        if (fltKeywords && !v.notlar.toLowerCase().includes(fltKeywords.toLowerCase()))
+            return false;
+
+        /* 5) garanti durumu */
+        if (fltActive === 'active'  && !isActive(v)) return false;
+        if (fltActive === 'expired' &&  isActive(v)) return false;
+
+        const serviceOk =
+            fltService.length === 0 || fltService.some((h) => v.islemler.includes(h));
+
+        return true;
+    });
+
+    const clearFilters = () => {
+        setFltPlaka('');
+        setFltKodLast4('');
+        setFltService([]);
+        setFltKeywords('');
+        setFltActive('all');
+        setNewFilterSrv('');
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        clearFilters();
+    };
 
     /* toast hook */
     const { ToastContainer, push } = useToast();
@@ -230,7 +283,7 @@ export default function AdminPage() {
             setCode(nextKod(entries));
         }
         catch {
-            push('Veriler alınamadı');
+            push('Veriler alınamadı.', 'error');
         }
     };
 
@@ -246,18 +299,19 @@ export default function AdminPage() {
                 localStorage.setItem('adminToken', d.token);
                 setToken(d.token);
                 fetchAll(d.token);
-                push('Giriş başarılı');
-            } else push(d.message || 'Giriş başarısız');
+                push('Giriş başarılı', 'success');
+            } else
+                push(d.message || '', 'info');
         } catch {
-            push('Sunucu hatası');
+            push('Sunucu hatası', 'error');
         }
     };
 
+    /* ───────────────────────── 1. submit() ───────────────────────── */
     const submit = async () => {
-        if (!/^(\d{4} ){3}\d{4}$/.test(code))
-            return push('Kod 16 haneli olmalı');
+        if (!/^(\d{4} ){3}\d{4}$/.test(code))          return push('Kod 16 haneli olmalı', 'warning');
         if (!plaka || !gStart || !gEnd || selected.size === 0)
-            return push('Zorunlu alanları doldurun');
+            return push('Zorunlu alanları doldurun', 'warning');
 
         const body = {
             kod: code.replace(/\s/g, ''),
@@ -270,6 +324,7 @@ export default function AdminPage() {
         };
 
         const url = editMode ? '/api/admin/kod-guncelle' : '/api/admin/kod-kaydet';
+
         try {
             const r = await fetch(url, {
                 method: editMode ? 'PUT' : 'POST',
@@ -280,13 +335,51 @@ export default function AdminPage() {
                 body: JSON.stringify(body),
             });
             if (!r.ok) throw new Error();
-            await fetchAll(token!);
-            reset();
-            push(editMode ? 'Kayıt güncellendi' : 'Kayıt eklendi');
+
+            /* ---------- OPTİMİSTİK EKLEME ---------- */
+            if (!editMode) {
+                setRecords(prev => [
+                    [
+                        code,
+                        {
+                            plakaNo: plaka,
+                            garanti: { baslangic: gStart, bitis: gEnd },
+                            notlar: note,
+                            islemler: Array.from(selected),
+                            tarih: new Date().toISOString(),
+                            custom: isCustom,
+                        },
+                    ],
+                    ...prev,
+                ]);
+
+                // sıradaki kodu anında göster
+                const nextNum = BigInt(code.replace(/\s/g, '')) + 1n;
+                setCode(fmt(nextNum.toString().padStart(16, '0')));
+            }
+
+            await fetchAll(token!);   // listede tam senkron kalalım
+            reset(false);             // kodu KORU
+            push(editMode ? 'Kayıt güncellendi' : 'Kayıt eklendi', 'success');
         } catch {
-            push('İşlem başarısız');
+            push('İşlem başarısız', 'error');
         }
     };
+
+    /* ───────────────────────── 2. reset() ───────────────────────── */
+    const reset = (hard: boolean = true) => {
+        setEditMode(false);
+        setPlaka('');
+        setGStart('');
+        setGEnd('');
+        setNote('');
+        setSelected(new Set());
+        setIsCustom(false);
+
+        // hard ⇒ listeye bakarak kodu yenile; false ⇒ mevcut kodu koru
+        if (hard) setCode(nextKod(records));
+    };
+
 
     const remove = async (kod: string) => {
         try {
@@ -300,18 +393,6 @@ export default function AdminPage() {
         } catch {
             push('Silme hatası');
         }
-    };
-
-    /* --- yardımcılar --- */
-    const reset = () => {
-        setEditMode(false);
-        setPlaka('');
-        setGStart('');
-        setGEnd('');
-        setNote('');
-        setSelected(new Set());
-        setIsCustom(false);
-        setCode(nextKod(records));
     };
 
     const edit = (kod: string, v: Kayit) => {
@@ -363,7 +444,7 @@ export default function AdminPage() {
                 <>
                     <header className="bg-white shadow">
                         {/* ► Ortalanmış, 7xl genişlikte flex konteyner */}
-                        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+                        <div className="max-w-[85%] mx-auto flex items-center justify-between px-4 py-3">
                             <h2 className="text-2xl font-semibold text-gray-800">Mechano Yönetici Paneli</h2>
 
                             <button
@@ -371,7 +452,7 @@ export default function AdminPage() {
                                     localStorage.removeItem('adminToken');
                                     setToken(null);
                                 }}
-                                className="px-4 py-1 rounded-sm border-2 border-red-700 cursor-pointer text-red-700 hover:bg-red-700 hover:text-white transition-colors duration-200"
+                                className="px-5 py-1 rounded-sm border-2 border-white cursor-pointer text-white bg-red-500 hover:bg-red-700  transition-colors duration-200"
                             >
                                 Çıkış Yap
                             </button>
@@ -379,7 +460,7 @@ export default function AdminPage() {
                     </header>
 
 
-                    <main className="max-w-7xl mx-auto mt-6 bg-white p-6 rounded shadow">
+                    <main className="max-w-[85%] mx-auto mt-6 bg-white p-6 rounded shadow">
                         {/* Form */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Kod */}
@@ -404,6 +485,7 @@ export default function AdminPage() {
                                         checked={isCustom}
                                         onChange={(e) => {
                                             setIsCustom(e.target.checked);
+                                            setCode("");
                                             if (!e.target.checked) reset();
                                         }}
                                     />
@@ -416,7 +498,7 @@ export default function AdminPage() {
                                 <input
                                     value={plaka}
                                     placeholder="34 ABC 38"
-                                    onChange={(e) => setPlaka(e.target.value)}
+                                    onChange={(e) => setPlaka(e.target.value.toUpperCase())}
                                     className="w-full px-3 py-2 border rounded border-gray-400"
                                 />
                             </div>
@@ -500,7 +582,7 @@ export default function AdminPage() {
                         {/* Aksiyon butonları */}
                         <div className="mt-4 flex justify-end gap-2">
                             <button
-                                onClick={reset}
+                                onClick={() => reset()}
                                 className="cursor-pointer px-6 py-2 transition-colors duration-200 bg-gray-300 rounded hover:bg-gray-400"
                             >
                                 Temizle
@@ -530,7 +612,7 @@ export default function AdminPage() {
                         </div>
 
                         <div className="overflow-x-auto">
-                            <table className="min-w-full text-sm">
+                            <table className="min-w-full text-md">
                                 <thead className="bg-gray-200">
                                 <tr>
                                     <th className="px-3 py-2">Kod</th>
@@ -557,16 +639,16 @@ export default function AdminPage() {
                                             {new Date(v.tarih).toLocaleString('tr-TR')}
                                         </td>
                                         <td className="px-3 py-2">{v.notlar}</td>
-                                        <td className="px-3 py-2 space-x-2">
+                                        <td className="px-1 py-2 space-x-1">
                                             <button
                                                 onClick={() => edit(k, v)}
-                                                className="text-blue-600 hover:scale-110 transition-all duration-200 cursor-pointer"
+                                                className="text-blue-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                             >
                                                 <PencilIcon className="h-6 w-6 inline" />
                                             </button>
                                             <button
                                                 onClick={() => setConfirm({ kod: k })}
-                                                className="text-red-600 hover:scale-110 transition-all duration-200 cursor-pointer"
+                                                className="text-red-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                             >
                                                 <TrashIcon className="h-6 w-6 inline" />
                                             </button>
@@ -581,38 +663,215 @@ export default function AdminPage() {
                     {/* --- Tüm Kayıtlar Modal --- */}
                     <Transition appear show={modalOpen} as={Fragment}>
                         <Dialog as="div" className="relative z-50" onClose={() => setModalOpen(false)}>
+                            {/* ‣ Koyu arka plan */}
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-200"
                                 enterFrom="opacity-0"
                                 enterTo="opacity-100"
-                                leave="ease-in duration-100"
+                                leave="ease-in duration-150"
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <div className="fixed inset-0 bg-black/40" />
+                                <div className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
                             </Transition.Child>
 
+                            {/* ‣ Panel */}
                             <div className="fixed inset-0 flex items-center justify-center p-4">
                                 <Transition.Child
                                     as={Fragment}
                                     enter="ease-out duration-200"
                                     enterFrom="opacity-0 scale-95"
                                     enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-100"
+                                    leave="ease-in duration-150"
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel className="bg-white w-full max-w-8xl p-6 rounded-lg shadow">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-xl font-semibold">Tüm Kayıtlar</h3>
-                                            <button onClick={() => setModalOpen(false)}>
-                                                <XMarkIcon className="h-6 w-6" />
+                                    <Dialog.Panel
+                                        className="w-full max-h-[92%] max-w-[92%] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden"
+                                    >
+                                        {/* ---------- Başlık satırı ---------- */}
+                                        <div className="flex items-center justify-between px-6 py-3 border-b">
+                                            <h3 className="text-2xl font-semibold tracking-tight mx-auto">
+                                                Müşteri Kayıtları Listesi
+                                            </h3>
+                                            <button
+                                                onClick={closeModal}
+                                                className="text-gray-700 hover:scale-125 cursor-pointer transition duration-200"
+                                            >
+                                                <XMarkIcon className="h-8 w-8" />
                                             </button>
                                         </div>
-                                        <div className="overflow-x-auto max-h-[60vh]">
-                                            <table className="min-w-full text-sm">
-                                                <thead className="bg-gray-200 sticky top-0">
+
+                                        <p className="text-gray-600 mx-6 my-4">
+                                            🛈 Aşağıdaki listeden <b>birden fazla hizmet</b> seçebilirsiniz.
+                                            Hiçbir seçim yapmazsanız tüm kayıtlar görüntülenir.
+                                            “Seçimleri Temizle”ye tıklayarak filtreyi sıfırlayabilir, listenin
+                                            altındaki alandan <b>özel</b> bir hizmet adı ekleyebilirsiniz.</p>
+
+
+                                        {/* ---------- Filtre çubuğu ---------- */}
+                                        <div className="px-6 pt-6 pb-3 bg-gray-50/60">
+                                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+
+                                                {/* Son 4 hane */}
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-md font-medium text-gray-600">
+                                                        Müşteri Kodu (Son 4 Hane) Filtreleme
+                                                    </label>
+                                                    <input
+                                                        value={fltKodLast4}
+                                                        onChange={(e) =>
+                                                            setFltKodLast4(
+                                                                e.target.value.replace(/\D/g, '').slice(0, 4)
+                                                            )
+                                                        }
+                                                        maxLength={4}
+                                                        placeholder="0001"
+                                                        className="rounded-md border border-gray-300 px-3 py-2 text-md tracking-widest placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+
+                                                {/* Plaka */}
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-md font-medium text-gray-600">
+                                                        Araç Plaka No. Filtreleme
+                                                    </label>
+                                                    <input
+                                                        value={fltPlaka}
+                                                        onChange={(e) => setFltPlaka(e.target.value)}
+                                                        placeholder="34 ABC 38"
+                                                        className="rounded-md border border-gray-300 px-3 py-2 text-md placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+
+                                                {/* Garanti durumu */}
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-md font-medium text-gray-600">
+                                                        Garanti Durumu Filtreleme
+                                                    </label>
+                                                    <select
+                                                        value={fltActive}
+                                                        onChange={(e) => setFltActive(e.target.value as any)}
+                                                        className="rounded-md border border-gray-300 px-3 py-[11px] text-md bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    >
+                                                        <option value="all">Tümü</option>
+                                                        <option value="active">Aktif</option>
+                                                        <option value="expired">Bitti</option>
+                                                    </select>
+                                                </div>
+
+                                                {/* Not anahtar kelimesi */}
+                                                <div className="flex flex-col gap-1">
+                                                    <label className="text-md font-medium text-gray-600">
+                                                        Notlarda Anahtar Kelime Filtreleme
+                                                    </label>
+                                                    <input
+                                                        value={fltKeywords}
+                                                        onChange={(e) => setFltKeywords(e.target.value)}
+                                                        placeholder="ör. seramik"
+                                                        className="rounded-md border border-gray-300 px-3 py-2 text-md placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+
+                                                {/* Hizmetler */}
+                                                <div className="flex flex-col gap-1 bg-white rounded-md border border-gray-300 p-3 md:col-span-2 lg:col-span-2 max-h-40 overflow-y-auto">
+
+                                                    {/* Başlık */}
+                                                    <span className="text-md font-medium text-gray-600 mb-1">Hizmet Filtreleme</span>
+
+                                                    {/* Liste */}
+                                                    {services.map((s) => {
+                                                        const isCore  = initialServices.includes(s);      // varsayılan mı?
+                                                        const checked = fltService.includes(s);
+
+                                                        return (
+                                                            <div
+                                                                key={s}
+                                                                className="flex items-center justify-between pr-1 hover:bg-gray-50 rounded"
+                                                            >
+                                                                {/* ✔︎ checkbox + etiket */}
+                                                                <label className="inline-flex items-center gap-2 text-md py-0.5 pl-1">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                                                        checked={checked}
+                                                                        onChange={() =>
+                                                                            checked
+                                                                                ? setFltService(fltService.filter((x) => x !== s))
+                                                                                : setFltService([...fltService, s])
+                                                                        }
+                                                                    />
+                                                                    {s}
+                                                                </label>
+
+                                                                {/* ✕ sil butonu – yalnızca custom hizmetlerde görünür */}
+                                                                {!isCore && (
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            // listeden at
+                                                                            setServices((prev) => prev.filter((x) => x !== s));
+                                                                            // varsa aktif filtreden de at
+                                                                            setFltService((prev) => prev.filter((x) => x !== s));
+                                                                            // varsa genel “selected” kümesinden de at
+                                                                            setSelected((prev) => {
+                                                                                const next = new Set(prev);
+                                                                                next.delete(s);
+                                                                                return next;
+                                                                            });
+                                                                            push(`“${s}” hizmeti listeden kaldırıldı`, 'warning');
+                                                                        }}
+                                                                        className="text-red-600 hover:scale-120 transition-all duration-200 px-1 text-xl cursor-pointer"
+                                                                        title="Bu hizmeti listeden kaldır"
+                                                                    >
+                                                                        ×
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+
+                                                    {/* Yeni hizmet ekleme alanı */}
+                                                    <div className="mt-2 flex gap-2">
+                                                        <input
+                                                            value={newFilterSrv}
+                                                            onChange={(e) => setNewFilterSrv(e.target.value)}
+                                                            placeholder="Yeni hizmet..."
+                                                            className="flex-1 rounded-md border border-gray-300 px-2 py-1 text-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                        />
+                                                        <button
+                                                            onClick={() => {
+                                                                const v = newFilterSrv.trim();
+                                                                if (!v)
+                                                                    return;
+                                                                if (services.includes(v))
+                                                                    return push('Hizmet zaten listede', 'error');
+                                                                setServices((prev) => [...prev, v]);
+                                                                setFltService((prev) => [...prev, v]);
+                                                                setNewFilterSrv('');
+                                                                push(`“${v}” listeye eklendi`, 'success');
+                                                            }}
+                                                            className="px-3 py-1 text-md bg-indigo-600 text-white rounded cursor-pointer hover:bg-indigo-700 transition"
+                                                        >
+                                                            Ekle
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Temizle butonu */}
+                                                    <button
+                                                        onClick={() => setFltService([])}
+                                                        className="self-start mt-3 text-md text-indigo-600 underline cursor-pointer"
+                                                    >
+                                                        Seçimleri Temizle
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* ---------- Tablo ---------- */}
+                                        <div className="flex-1 overflow-x-auto p-6">
+                                            <table className="min-w-full text-md ">
+                                                <thead className="bg-gray-200 top-0 shadow dp">
                                                 <tr>
                                                     <th className="px-3 py-2">Kod</th>
                                                     <th className="px-3 py-2">Plaka</th>
@@ -623,9 +882,16 @@ export default function AdminPage() {
                                                     <th className="px-3 py-2">İşlem</th>
                                                 </tr>
                                                 </thead>
+
                                                 <tbody>
-                                                {records.map(([k, v]) => (
-                                                    <tr key={k} className="border-t">
+                                                {filtered.map(([k, v]) => (
+                                                    <tr
+                                                        key={k}
+                                                        className={clsx(
+                                                            'border-t',
+                                                            !isActive(v) && 'bg-red-50 text-gray-500'
+                                                        )}
+                                                    >
                                                         <td className="px-3 py-2">{k}</td>
                                                         <td className="px-3 py-2">{v.plakaNo}</td>
                                                         <td className="px-3 py-2">
@@ -635,26 +901,36 @@ export default function AdminPage() {
                                                         <td className="px-3 py-2">
                                                             {new Date(v.tarih).toLocaleString('tr-TR')}
                                                         </td>
-                                                        <td className="px-3 py-2">{v.notlar}</td>
-                                                        <td className="px-3 py-2 space-x-2">
+                                                        <td className="px-3 py-2 max-w-[12rem] truncate">
+                                                            {v.notlar}
+                                                        </td>
+                                                        <td className="px-2 py-2 space-x-1">
                                                             <button
                                                                 onClick={() => {
                                                                     edit(k, v);
                                                                     setModalOpen(false);
                                                                 }}
-                                                                className="text-blue-600 hover:underline"
+                                                                className="text-blue-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                                             >
                                                                 <PencilIcon className="h-5 w-5 inline" />
                                                             </button>
                                                             <button
                                                                 onClick={() => setConfirm({ kod: k })}
-                                                                className="text-red-600 hover:underline"
+                                                                className="text-red-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                                             >
                                                                 <TrashIcon className="h-5 w-5 inline" />
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 ))}
+
+                                                {filtered.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan={7} className="py-6 text-center text-gray-500">
+                                                            Kayıt bulunamadı.
+                                                        </td>
+                                                    </tr>
+                                                )}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -664,16 +940,20 @@ export default function AdminPage() {
                         </Dialog>
                     </Transition>
 
+
                     {/* --- Silme Onayı --- */}
                     {confirm && (
-                        <ConfirmDialog
-                            open={!!confirm}
-                            onClose={() => setConfirm(null)}
-                            onConfirm={() => remove(confirm.kod)}
-                            title={`${code} Numaralı Kaydı Sil`}
-                            message="Kayıt silme işlemi geri alınamaz."
-                        />
-                    )}
+                        <>
+                            <ConfirmDialog
+                                open={!!confirm}
+                                onClose={() => setConfirm(null)}
+                                onConfirm={() => remove(confirm.kod)}
+                                title="Kaydı Sil"
+                                message="Kayıt silme işlemi geri alınamaz."
+                            />
+                            <div className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
+                        </>
+                        )}
                 </>
             )}
         </div>
