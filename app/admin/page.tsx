@@ -2,15 +2,15 @@
 
 import {Fragment, JSX, useEffect, useState} from 'react';
 import clsx from "clsx";
-import { Dialog, Transition } from '@headlessui/react';
+import {Dialog, Transition} from '@headlessui/react';
 import {
     PencilIcon,
     TrashIcon,
     XMarkIcon,
     ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
-import { services as serviceDefs } from '@/data/services';
-import { motion, AnimatePresence } from 'framer-motion';
+import {services as serviceDefs} from '@/data/services';
+import {motion, AnimatePresence} from 'framer-motion';
 import {
     CheckCircleIcon,
     InformationCircleIcon,
@@ -42,16 +42,16 @@ interface Toast {
 
 const COLOR: Record<Variant, string> = {
     success: 'bg-green-600',
-    error:   'bg-red-600',
-    info:    'bg-slate-800',
+    error: 'bg-red-600',
+    info: 'bg-slate-800',
     warning: 'bg-amber-500',
 };
 
 const ICON: Record<Variant, JSX.Element> = {
-    success: <CheckCircleIcon       className="h-5 w-5" />,
-    error:   <ExclamationTriangleIcon className="h-5 w-5" />,
-    info:    <InformationCircleIcon className="h-5 w-5" />,
-    warning: <ExclamationTriangleIcon className="h-5 w-5" />,
+    success: <CheckCircleIcon className="h-5 w-5"/>,
+    error: <ExclamationTriangleIcon className="h-5 w-5"/>,
+    info: <InformationCircleIcon className="h-5 w-5"/>,
+    warning: <ExclamationTriangleIcon className="h-5 w-5"/>,
 };
 
 const useToast = () => {
@@ -59,7 +59,7 @@ const useToast = () => {
 
     const push = (msg: string, variant: Variant = 'info', ms = 3000) => {
         const id = Date.now();
-        setToasts((t) => [...t, { id, msg, variant }]);
+        setToasts((t) => [...t, {id, msg, variant}]);
 
         setTimeout(() => {
             setToasts((t) => t.filter((x) => x.id !== id));
@@ -69,12 +69,12 @@ const useToast = () => {
     const ToastContainer = () => (
         <div className="fixed top-6 right-6 z-[9999] space-y-2">
             <AnimatePresence>
-                {toasts.map(({ id, msg, variant }) => (
+                {toasts.map(({id, msg, variant}) => (
                     <motion.div
                         key={id}
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
+                        initial={{opacity: 0, x: 50}}
+                        animate={{opacity: 1, x: 0}}
+                        exit={{opacity: 0, x: 50}}
                         className={`
               ${COLOR[variant]}
               text-white px-4 py-2 rounded shadow flex items-center gap-2
@@ -88,7 +88,7 @@ const useToast = () => {
         </div>
     );
 
-    return { push, ToastContainer };
+    return {push, ToastContainer};
 }
 
 function ConfirmDialog({
@@ -116,7 +116,7 @@ function ConfirmDialog({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black/40" />
+                    <div className="fixed inset-0 bg-black/40"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -131,7 +131,7 @@ function ConfirmDialog({
                     >
                         <Dialog.Panel className="w-full max-w-md rounded bg-white p-7 space-y-5 shadow-2xl">
                             <Dialog.Title className="text-lg font-bold flex items-center gap-2">
-                                <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
+                                <ExclamationTriangleIcon className="h-8 w-8 text-red-600"/>
                                 {title}
                             </Dialog.Title>
                             <p className="text-md text-gray-700">{message}</p>
@@ -177,22 +177,28 @@ function EditDialog({
                         onSuccess,
                         services,
                         setServices,
-                    }: EditProps) {
+                    }: EditProps
+) {
     /* ---------- lokal state ---------- */
-    const [plaka, setPlaka]   = useState('');
+    const [plaka, setPlaka] = useState('');
     const [gStart, setGStart] = useState('');
-    const [gEnd, setGEnd]     = useState('');
-    const [note, setNote]     = useState('');
-    const [srv,  setSrv]      = useState<Set<string>>(new Set());
+    const [gEnd, setGEnd] = useState('');
+    const [note, setNote] = useState('');
+    const [srv, setSrv] = useState<Set<string>>(new Set());
     const [newSrv, setNewSrv] = useState('');
 
     /* payload gelince formu doldur */
     useEffect(() => {
-        if (!payload) return;
+        if (!payload)
+            return;
         const d = payload.data;
+        const formatDate = (iso: string) => {
+            const date = new Date(iso);
+            return date.toISOString().split('T')[0]; // YYYY-MM-DD
+        };
         setPlaka(d.plakaNo);
-        setGStart(d.garanti.baslangic.slice(0, 10));
-        setGEnd(d.garanti.bitis.slice(0, 10));
+        setGStart(formatDate(d.garanti.baslangic));
+        setGEnd(formatDate(d.garanti.bitis));
         setNote(d.notlar);
         setSrv(new Set(d.islemler));
         setNewSrv('');
@@ -236,6 +242,8 @@ function EditDialog({
             body: JSON.stringify(body),
         });
         onSuccess();
+        console.log("gStart: ", gStart);
+        console.log("gEnd: ", gEnd);
         onClose();
     };
 
@@ -255,7 +263,7 @@ function EditDialog({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -274,21 +282,23 @@ function EditDialog({
                                 <Dialog.Title className="text-xl font-semibold">
                                     <span className="text-indigo-600 tracking-wider">
                                         {payload.kod}
-                                    </span> <br />
+                                    </span> <br/>
                                     Numaralı Kaydı Düzenle
                                 </Dialog.Title>
                                 <button
                                     onClick={onClose}
                                     className="text-gray-500 hover:text-gray-900 transition cursor-pointer"
                                 >
-                                    <XMarkIcon className="h-8 w-8 hover:w-9 hover:h-9 transition-all duration-100 hover:transition-all hover:duration-100" />
+                                    <XMarkIcon
+                                        className="h-8 w-8 hover:w-9 hover:h-9 transition-all duration-100 hover:transition-all hover:duration-100"/>
                                 </button>
                             </div>
 
                             {/* form */}
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="flex flex-col">
-                                    <label className="text-sm font-medium mb-1">Garanti Başlangıç Tarihi (<b>ay/gün/yıl</b> olarak)</label>
+                                    <label className="text-sm font-medium mb-1">Garanti Başlangıç Tarihi
+                                        (<b>ay/gün/yıl</b> olarak)</label>
                                     <input
                                         type="date"
                                         value={gStart}
@@ -298,7 +308,8 @@ function EditDialog({
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-sm font-medium mb-1">Garanti Bitiş Tarihi (<b>ay/gün/yıl</b>  olarak)</label>
+                                    <label className="text-sm font-medium mb-1">Garanti Bitiş Tarihi
+                                        (<b>ay/gün/yıl</b> olarak)</label>
                                     <input
                                         type="date"
                                         value={gEnd}
@@ -332,7 +343,8 @@ function EditDialog({
                             <div>
                                 <p className="text-sm font-medium mb-2">Hizmetler</p>
 
-                                <div className="max-h-40 overflow-y-auto border rounded p-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                <div
+                                    className="max-h-40 overflow-y-auto border rounded p-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
                                     {services.map(s => (
                                         <label key={s} className="inline-flex items-center gap-2 text-sm">
                                             <input
@@ -414,11 +426,11 @@ export default function AdminPage() {
     const [editPayload, setEditPayload] = useState<{ kod: string, data: Kayit } | null>(null);
 
     /* --- filtre state'leri --- */
-    const [fltPlaka,    setFltPlaka]    = useState('');
+    const [fltPlaka, setFltPlaka] = useState('');
     const [fltKodLast4, setFltKodLast4] = useState('');
-    const [fltService,  setFltService]  = useState<string[]>([]);
+    const [fltService, setFltService] = useState<string[]>([]);
     const [fltKeywords, setFltKeywords] = useState('');
-    const [fltActive,   setFltActive]   = useState<'all' | 'active' | 'expired'>('all');
+    const [fltActive, setFltActive] = useState<'all' | 'active' | 'expired'>('all');
     const [newFilterSrv, setNewFilterSrv] = useState(''); // “yeni hizmet” input’u
 
     /* --- yardım: garanti aktif mi? --- */
@@ -443,8 +455,8 @@ export default function AdminPage() {
             return false;
 
         /* 5) garanti durumu */
-        if (fltActive === 'active'  && !isActive(v)) return false;
-        if (fltActive === 'expired' &&  isActive(v)) return false;
+        if (fltActive === 'active' && !isActive(v)) return false;
+        if (fltActive === 'expired' && isActive(v)) return false;
 
         const serviceOk =
             fltService.length === 0 || fltService.some((h) => v.islemler.includes(h));
@@ -467,7 +479,7 @@ export default function AdminPage() {
     };
 
     /* toast hook */
-    const { ToastContainer, push } = useToast();
+    const {ToastContainer, push} = useToast();
 
     /* --- yardımcı fonksiyonlar --- */
     const fmt = (raw: string) =>
@@ -496,7 +508,6 @@ export default function AdminPage() {
         }
     }, []);
 
-    /* --- API çağrıları --- */
     const fetchAll = async (tkn: string) => {
         try {
             const r = await fetch('/api/admin/kod-tum', {
@@ -504,25 +515,27 @@ export default function AdminPage() {
             });
             if (!r.ok) throw new Error();
             const data = await r.json();
+
+            // 👇 BU SATIRI EKLE
+            console.log("FETCHED RECORDS:", data);
+
             const entries = (Object.entries(data || {}) as [string, Kayit][])
-                .sort(
-                    (t1, t2) =>
-                        new Date(t2[1].tarih).getTime() - new Date(t1[1].tarih).getTime()
-                )
+                .sort((t1, t2) => new Date(t2[1].tarih).getTime() - new Date(t1[1].tarih).getTime());
+
             setRecords(entries);
             setCode(nextKod(entries));
-        }
-        catch {
+        } catch {
             push('Veriler alınamadı.', 'error');
         }
     };
+
 
     const login = async () => {
         try {
             const r = await fetch('/api/admin/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password}),
             });
             const d = await r.json();
             if (d.token) {
@@ -539,7 +552,7 @@ export default function AdminPage() {
 
     /* ───────────────────────── 1. submit() ───────────────────────── */
     const submit = async () => {
-        if (!/^(\d{4} ){3}\d{4}$/.test(code))          return push('Kod 16 haneli olmalı', 'warning');
+        if (!/^(\d{4} ){3}\d{4}$/.test(code)) return push('Kod 16 haneli olmalı', 'warning');
         if (!plaka || !gStart || !gEnd || selected.size === 0)
             return push('Zorunlu alanları doldurun', 'warning');
 
@@ -573,7 +586,7 @@ export default function AdminPage() {
                         code,
                         {
                             plakaNo: plaka,
-                            garanti: { baslangic: gStart, bitis: gEnd },
+                            garanti: {baslangic: gStart, bitis: gEnd},
                             notlar: note,
                             islemler: Array.from(selected),
                             tarih: new Date().toISOString(),
@@ -615,7 +628,7 @@ export default function AdminPage() {
         try {
             const r = await fetch(`/api/admin/kod-sil?kod=${kod}`, {
                 method: 'DELETE',
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
             if (!r.ok) throw new Error();
             fetchAll(token!);
@@ -628,7 +641,7 @@ export default function AdminPage() {
     /* ----------------------- JSX ----------------------- */
     return (
         <div className="min-h-screen bg-white">
-            <ToastContainer />
+            <ToastContainer/>
 
             {/* --------- LOGIN --------- */}
             {!token && (
@@ -694,8 +707,11 @@ export default function AdminPage() {
                                     )}
                                     readOnly={!isCustom}
                                 />
-                                <p className="text-gray-600 pt-2">🛈 Sistemdeki son müşteri kodu algılandı ve sıradaki kod otomatik olarak üretildi.</p>
-                                <p className="text-gray-600 pt-2">🛈 Sıralı kod yerine kendi belirleyeceğiniz bir müşteri kodu tanımlamak istiyorsanız, lütfen alttaki kutucuğu işaretleyin ve alanı elle doldurun.</p>
+                                <p className="text-gray-600 pt-2">🛈 Sistemdeki son müşteri kodu algılandı ve sıradaki
+                                    kod otomatik olarak üretildi.</p>
+                                <p className="text-gray-600 pt-2">🛈 Sıralı kod yerine kendi belirleyeceğiniz bir müşteri
+                                    kodu tanımlamak istiyorsanız, lütfen alttaki kutucuğu işaretleyin ve alanı elle
+                                    doldurun.</p>
                                 <label className="inline-flex items-center mt-2">
                                     <input
                                         type="checkbox"
@@ -814,11 +830,13 @@ export default function AdminPage() {
                         </div>
 
                         {/* Son Kayıtlar */}
-                        <hr className="my-6" />
+                        <hr className="my-6"/>
                         <div className="justify-between items-center mb-2">
                             <h2 className="font-semibold">Son 5 Kayıt</h2>
                             <p className="py-2 text-gray-500">
-                                🛈 Aşağıda en son eklenen beş müşteri kaydını görüntülüyorsunuz. Kalem simgesiyle kaydı düzenleyebilir, Çöp kutusu simgesiyle silebilirsiniz. Tüm geçmişi incelemek için ise “Tüm Kayıtları Görüntüle” butonunu kullanabilirsiniz.</p>
+                                🛈 Aşağıda en son eklenen beş müşteri kaydını görüntülüyorsunuz. Kalem simgesiyle kaydı
+                                düzenleyebilir, Çöp kutusu simgesiyle silebilirsiniz. Tüm geçmişi incelemek için ise
+                                “Tüm Kayıtları Görüntüle” butonunu kullanabilirsiniz.</p>
                             {records.length > 5 && (
                                 <button
                                     onClick={() => setModalOpen(true)}
@@ -860,18 +878,18 @@ export default function AdminPage() {
                                         <td className="px-1 py-2 space-x-1">
                                             <button
                                                 onClick={() => {
-                                                    setEditPayload({ kod: k, data: v });
+                                                    setEditPayload({kod: k, data: v});
                                                     setEditDlgOpen(true);
                                                 }}
                                                 className="text-blue-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                             >
-                                                <PencilIcon className="h-6 w-6 inline" />
+                                                <PencilIcon className="h-6 w-6 inline"/>
                                             </button>
                                             <button
-                                                onClick={() => setConfirm({ kod: k })}
+                                                onClick={() => setConfirm({kod: k})}
                                                 className="text-red-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                             >
-                                                <TrashIcon className="h-6 w-6 inline" />
+                                                <TrashIcon className="h-6 w-6 inline"/>
                                             </button>
                                         </td>
                                     </tr>
@@ -894,7 +912,7 @@ export default function AdminPage() {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <div className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
+                                <div className="fixed inset-0 bg-black/10 backdrop-blur-sm"/>
                             </Transition.Child>
 
                             {/* ‣ Panel */}
@@ -920,7 +938,7 @@ export default function AdminPage() {
                                                 onClick={closeModal}
                                                 className="text-gray-700 hover:scale-125 cursor-pointer transition duration-200"
                                             >
-                                                <XMarkIcon className="h-8 w-8" />
+                                                <XMarkIcon className="h-8 w-8"/>
                                             </button>
                                         </div>
 
@@ -932,7 +950,7 @@ export default function AdminPage() {
 
 
                                         {/* ---------- Filtre çubuğu ---------- */}
-                                        <div className="px-6 pt-6 pb-3 bg-gray-50/60">
+                                        <div className="px-6 pt-6 bg-gray-50/60">
                                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
 
                                                 {/* Son 4 hane */}
@@ -996,14 +1014,15 @@ export default function AdminPage() {
                                                 </div>
 
                                                 {/* Hizmetler */}
-                                                <div className="flex flex-col gap-1 bg-white rounded-md border border-gray-300 p-3 md:col-span-2 lg:col-span-2 max-h-40 overflow-y-auto">
+                                                <div
+                                                    className="flex flex-col gap-1 bg-white rounded-md border border-gray-300 p-3 md:col-span-2 lg:col-span-2 max-h-40 overflow-y-auto">
 
                                                     {/* Başlık */}
                                                     <span className="text-md font-medium text-gray-600 mb-1">Hizmet Filtreleme</span>
 
                                                     {/* Liste */}
                                                     {services.map((s) => {
-                                                        const isCore  = initialServices.includes(s);      // varsayılan mı?
+                                                        const isCore = initialServices.includes(s);      // varsayılan mı?
                                                         const checked = fltService.includes(s);
 
                                                         return (
@@ -1012,7 +1031,8 @@ export default function AdminPage() {
                                                                 className="flex items-center justify-between pr-1 hover:bg-gray-50 rounded"
                                                             >
                                                                 {/* ✔︎ checkbox + etiket */}
-                                                                <label className="inline-flex items-center gap-2 text-md py-0.5 pl-1">
+                                                                <label
+                                                                    className="inline-flex items-center gap-2 text-md py-0.5 pl-1">
                                                                     <input
                                                                         type="checkbox"
                                                                         className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
@@ -1081,11 +1101,19 @@ export default function AdminPage() {
                                                     {/* Temizle butonu */}
                                                     <button
                                                         onClick={() => setFltService([])}
-                                                        className="self-start mt-3 text-md text-indigo-600 underline cursor-pointer"
+                                                        className="self-start mt-1 text-md text-indigo-600 underline cursor-pointer"
                                                     >
                                                         Seçimleri Temizle
                                                     </button>
                                                 </div>
+
+                                                <button
+                                                    onClick={clearFilters}
+                                                    className="text-indigo-600 cursor-pointer underline hover:text-indigo-800 transition"
+                                                >
+                                                    Tüm Filtreleri Sıfırla
+                                                </button>
+
                                             </div>
                                         </div>
 
@@ -1128,18 +1156,18 @@ export default function AdminPage() {
                                                         <td className="px-2 py-2 space-x-1">
                                                             <button
                                                                 onClick={() => {
-                                                                    setEditPayload({ kod: k, data: v });
+                                                                    setEditPayload({kod: k, data: v});
                                                                     setEditDlgOpen(true);
                                                                 }}
                                                                 className="text-blue-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                                             >
-                                                                <PencilIcon className="h-5 w-5 inline" />
+                                                                <PencilIcon className="h-5 w-5 inline"/>
                                                             </button>
                                                             <button
-                                                                onClick={() => setConfirm({ kod: k })}
+                                                                onClick={() => setConfirm({kod: k})}
                                                                 className="text-red-600 hover:scale-120 transition-all duration-200 cursor-pointer"
                                                             >
-                                                                <TrashIcon className="h-5 w-5 inline" />
+                                                                <TrashIcon className="h-5 w-5 inline"/>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -1163,6 +1191,7 @@ export default function AdminPage() {
 
                     {/* Kayıt Düzenleme Dialog */}
                     <EditDialog
+                        key={editPayload?.kod || 'no-key'}
                         open={editDlgOpen}
                         onClose={() => setEditDlgOpen(false)}
                         payload={editPayload}
@@ -1184,9 +1213,9 @@ export default function AdminPage() {
                                 title="Kaydı Sil"
                                 message="Kayıt silme işlemi geri alınamaz."
                             />
-                            <div className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
+                            <div className="fixed inset-0 bg-black/10 backdrop-blur-sm"/>
                         </>
-                        )}
+                    )}
                 </>
             )}
         </div>
