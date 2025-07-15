@@ -15,7 +15,6 @@ h1 {
   font-family: 'Anton';
   font-weight: normal;
   font-size: 100px;
-  line-height: 3.7rem;
 }
 
 @media (max-width: 1023px) {
