@@ -95,7 +95,7 @@ export default function AboutPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-tl from-red-950 to-gray-900 border-b-4 border-white" />
                 <svg className="absolute bottom-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
-                    <path d="M0 70L1600 0V70H0Z" fill="#fff" />
+                    <path d="M0 64L1600 0V70H0Z" fill="#fff" />
                 </svg>
 
                 <motion.div {...fadeUp} className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
@@ -114,7 +114,7 @@ export default function AboutPage() {
             {/* ================= HİKAYE ================= */}
             <section className="pb-24 pt-16 px-6 md:px-12 max-w-6xl mx-auto">
                 <motion.h1 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-12 text-center"  style={{
-                    fontSize: '5rem',
+                    fontSize: '3rem',
                 }}>
                     NASIL <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40"> BAŞLADI? </span>
                 </motion.h1>
@@ -160,7 +160,7 @@ export default function AboutPage() {
             {/* ================= HİZMETLER ================= */}
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
                 <motion.h1 {...fadeUp} className="md:text-4xl font-bold mb-14 text-center" style={{
-                    fontSize: '5rem',
+                    fontSize: '3rem',
                 }}>
                     BAŞLICA <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40"> HİZMETLERİMİZ </span>
                 </motion.h1>

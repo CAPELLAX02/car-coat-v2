@@ -31,10 +31,12 @@ export default function ServicePage({ title, image, features, description }: Ser
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 bg-black/60" />
+                <div className="absolute inset-0 bg-black/70" />
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                     <h1 className="text-5xl md:text-6xl font-display font-bold text-white uppercase tracking-wide">
-                        {title}
+                        <span className="bg-gradient-to-r from-orange-200 to-red-200 text-transparent bg-clip-text h-3.5 z-40">
+                            {title}
+                        </span>
                     </h1>
                 </div>
             </div>
@@ -48,7 +50,7 @@ export default function ServicePage({ title, image, features, description }: Ser
                     className="text-3xl font-bold text-center mb-4"
                 >
                     Neden&nbsp;
-                    <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">
+                    <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40">
             {title}
           </span>
                     &nbsp;Hizmetimizi Tercih Etmelisiniz?
@@ -73,19 +75,19 @@ export default function ServicePage({ title, image, features, description }: Ser
                     {features.map((feature, index) => (
                         <div
                             key={index}
-                            className="group hover:text-white hover:bg-gradient-to-br hover:from-orange-500 hover:to-red-700 transition-all duration-300 bg-white px-12 py-6 rounded-none cursor-pointer hover:-translate-y-5"
+                            className="group transition-all duration-300 bg-white px-12 py-6 rounded-none cursor-pointer hover:-translate-y-2 hover:shadow-lg"
                             style={{
                                 marginTop: index * 100,
                                 marginBottom: -index * 100,
                             }}
                         >
-                            <div className="text-4xl text-black mb-4 group-hover:text-white transition-all duration-300">
+                            <div className="text-4xl text-black mb-4  transition-all duration-300">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-2xl font-semibold mb-2 group-hover:text-white transition-all duration-300">
+                            <h3 className="text-2xl font-semibold mb-2  transition-all duration-300">
                                 {feature.title}
                             </h3>
-                            <p className="text-gray-600 text-lg group-hover:text-white transition-all duration-300">
+                            <p className="text-gray-600 text-lg  transition-all duration-300">
                                 {feature.description}
                             </p>
                         </div>
@@ -102,7 +104,7 @@ export default function ServicePage({ title, image, features, description }: Ser
                         transition={{ duration: 0.6 }}
                         className="text-3xl font-bold mb-4"
                     >
-            <span className="bg-gradient-to-r from-orange-600 to-red-700 text-transparent bg-clip-text h-3.5 z-40">
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40">
               {title}
             </span>{' '}
                         ile Tanışmaya Hazır mısınız?
