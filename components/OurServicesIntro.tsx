@@ -12,7 +12,7 @@ export default function OurServicesIntro() {
                 {/* Sol Başlık Alanı */}
                 <div>
                     <motion.h5
-                        initial={{ opacity: 0, x: -60 }}
+                        initial={{ opacity: 0, x: -80 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
                         className="text-red-600 text-sm font-semibold tracking-widest uppercase"
@@ -20,12 +20,7 @@ export default function OurServicesIntro() {
                         Hizmetlerimiz
                     </motion.h5>
 
-                    <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: '100%' }}
-                        transition={{ duration: 0.7 }}
-                        className="h-px bg-black mt-2 mb-6"
-                    />
+                    <div className="h-px bg-black mt-2 mb-6" />
 
                     <motion.h1
                         initial={{ opacity: 0, y: 100 }}
@@ -43,8 +38,8 @@ export default function OurServicesIntro() {
                 {/* Sağ Açıklama + Buton */}
                 <div className="flex flex-col gap-8">
                     <motion.p
-                        initial={{ opacity: 0, x: 200 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 200 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1 }}
                         className="text-gray-600 text-sm leading-relaxed"
                     >

@@ -9,6 +9,7 @@ html,
 body {
   scroll-behavior: smooth;
   background-color: #fff;
+  overflow-x: hidden;
 }
 h1 {
   font-family: 'Anton';

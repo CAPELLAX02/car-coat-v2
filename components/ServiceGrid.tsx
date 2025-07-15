@@ -40,9 +40,8 @@ export default function ServicesGrid() {
                                 className={`group h-64 p-8 cursor-pointer flex flex-col justify-between hover:bg-gradient-to-br hover:from-orange-700 hover:to-red-700 transition-colors duration-400 hover:text-white ${
                                     isDark ? 'bg-black text-white' : 'bg-white text-black'
                                 }`}
-                                whileHover={{ scale: 1.02 }}
                             >
-                                <div className="flex flex-col gap-4 group-hover:scale-105 group-hover:pt-5 pl-5 transition-all duration-500">
+                                <div className="flex flex-col gap-4 group-hover:scale-105 group-hover:pt-5 pl-5 transition-all duration-300 hover:transition-all hover:duration-300">
                                     <Icon className="w-10 h-10" />
                                     <h3 className="text-lg font-bold uppercase font-display">{service.title}</h3>
                                 </div>

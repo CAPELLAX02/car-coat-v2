@@ -1,4 +1,3 @@
-// app/(site)/layout.tsx
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MapSection from '@/components/MapSection';

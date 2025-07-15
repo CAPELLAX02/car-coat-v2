@@ -1,4 +1,3 @@
-// app/layout.tsx  – ROOT
 import './globals.css';
 import { Inter, Anton } from 'next/font/google';
 
@@ -7,8 +6,10 @@ const anton = Anton({ weight: '400', subsets: ['latin'], variable: '--font-anton
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="tr" className={`${inter.variable} ${anton.variable}`}>
-        <body className={inter.className}>{children}</body>
+        <html lang="tr" className={`${inter.variable} ${anton.variable} overflow-x-hidden`}>
+            <body className={inter.className}>
+                {children}
+            </body>
         </html>
     );
 }
