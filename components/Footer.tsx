@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
                 {/* Logo + Tanım */}
                 <div>
-                    <h2 className="text-3xl font-display font-bold">MECHANO.</h2>
+                    <h2 className="text-3xl font-display font-bold">METALLIC GARAGE.</h2>
                     <p className="text-sm mt-4 leading-relaxed">
                         Performans ve hassasiyeti ustalıkla buluşturan <strong>premium araç
                         bakım</strong> çözümleri. Kaplamadan detaylandırmaya, aradığınız tüm
@@ -71,7 +71,7 @@ export default function Footer() {
 
             {/* ---------- Alt Çizgi ---------- */}
             <div className="mt-12 border-t-4 border-black pt-6 text-center text-sm">
-                &copy; {new Date().getFullYear()} Mechano. Tüm hakları saklıdır.
+                &copy; {new Date().getFullYear()} Mettalic Garage. Tüm hakları saklıdır.
             </div>
         </footer>
     );

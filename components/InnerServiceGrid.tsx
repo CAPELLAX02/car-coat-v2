@@ -6,22 +6,15 @@ import Link from 'next/link';
 import {FaArrowRight} from "react-icons/fa";
 
 export const services = [
-    { slug: 'ceramic-coating',       title: 'SERAMİK KAPLAMA',       cat: 'KORUMA',     img: '/assets/hero-1.jpg' },
-    { slug: 'ppf',                   title: 'BOYA KORUMA\nFİLMİ',    cat: 'KORUMA',     img: '/assets/hero-2.jpg' },
-    { slug: 'interior-detailing',    title: 'İÇ DETAYLANDIRMA',      cat: 'DETAY',      img: '/assets/hero-3.jpg' },
-    { slug: 'exterior-detailing',    title: 'DIŞ DETAYLANDIRMA',     cat: 'DETAY',      img: '/assets/hero-4.jpg' },
-    { slug: 'engine-wash',           title: 'MOTOR YIKAMA',          cat: 'BAKIM',      img: '/assets/hero-3.jpg' },
-    { slug: 'polishing',             title: 'CİLALAMA',              cat: 'KOZMETİK',   img: '/assets/hero-4.jpg' },
-    { slug: 'window-tint',           title: 'CAM FİLMİ',             cat: 'KOZMETİK',   img: '/assets/hero-2.jpg' },
-    { slug: 'headlight-restoration', title: 'FAR\nYENİLEME',         cat: 'BAKIM',      img: '/assets/hero-1.jpg' },
+    { slug: 'ppf',           title: 'BOYA KORUMA FİLMİ', cat: 'KORUMA', img: '/assets/hero-2.jpg' },
+    { slug: 'color-change',  title: 'RENK DEĞİŞİMİ',     cat: 'TASARIM', img: '/assets/hero-1.jpg' },
+    { slug: 'window-tint',   title: 'CAM FİLMİ',         cat: 'KONFOR',  img: '/assets/hero-3.jpg' },
 ];
-
-
 
 export default function InnerServicesGrid() {
     return (
         <section className="bg-black">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-[1px] bg-black">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-black">
                 {services.map((s) => (
                     <ServiceCard key={s.slug} service={s} />
                 ))}

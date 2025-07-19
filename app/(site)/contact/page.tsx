@@ -88,7 +88,7 @@ export default function ContactPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.6 }}
                         >
-                            Mechano Araç Kaplama Dünyası’na hoş geldiniz! Kaplama
+                            Mettalic Garage Dünyası’na hoş geldiniz! Kaplama
                             seçeneklerimiz, boya koruma filmlerimiz ve kişiye özel tasarım
                             hizmetlerimiz hakkında merak ettiğiniz her şey için 7/24
                             yanınızdayız.

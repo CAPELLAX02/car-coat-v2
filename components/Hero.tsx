@@ -8,7 +8,7 @@ import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 
 const slide = {
     title: 'Pürüzsüz Sürüş, Üstün Hizmet.',
-    text: `Diagnostikten teslimata kadar her aşamada aracınızı daha pürüzsüz, güvenli ve güçlü kılıyoruz. Kalite için Mechano’ya güvenin.`,
+    text: `Diagnostikten teslimata kadar her aşamada aracınızı daha pürüzsüz, güvenli ve güçlü kılıyoruz. Kalite için Mettalic Garage’a güvenin.`,
     videoSrc: '/assets/tanitim-video.mp4',
     highlight: 'Pürüzsüz',
 };

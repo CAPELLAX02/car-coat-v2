@@ -17,16 +17,10 @@ export default function Header() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    /* Dropdown’daki hizmet başlıkları – slug’lar aynı kalıyor */
     const services = [
-        { title: 'SERAMİK KAPLAMA',          slug: 'ceramic-coating' },
-        { title: 'BOYA KORUMA FİLMİ',        slug: 'ppf' },
-        { title: 'İÇ DETAYLANDIRMA',         slug: 'interior-detailing' },
-        { title: 'DIŞ DETAYLANDIRMA',        slug: 'exterior-detailing' },
-        { title: 'MOTOR YIKAMA',             slug: 'engine-wash' },
-        { title: 'CİLALAMA',                 slug: 'polishing' },
-        { title: 'CAM FİLMİ',                slug: 'window-tint' },
-        { title: 'FAR YENİLEME',             slug: 'headlight-restoration' },
+        { title: 'BOYA KORUMA FİLMİ', slug: 'ppf' },
+        { title: 'RENK DEĞİŞİMİ',     slug: 'color-change' },
+        { title: 'CAM FİLMİ',         slug: 'window-tint' },
     ];
 
     const linkClass = (scrolled: boolean) =>
@@ -47,7 +41,7 @@ export default function Header() {
                 <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
                     {/* Logo */}
                     <Link href="/" className="text-2xl font-bold tracking-widest">
-                        <span className={scrolled ? 'text-black' : 'text-white'}>MECHANO.</span>
+                        <span className={scrolled ? 'text-black' : 'text-white'}>METALLIC GARAGE.</span>
                     </Link>
 
                     {/* -------- DESKTOP NAV -------- */}

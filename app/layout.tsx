@@ -6,21 +6,21 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'sw
 const anton = Anton({ weight: '400', subsets: ['latin'], variable: '--font-anton', display: 'swap' });
 
 export const metadata: Metadata = {
-    title: 'Mechano | Araç Kaplama Hizmetleri',
+    title: 'Mettalic Garage | Araç Hizmetleri',
     description: 'Yüksek kaliteli kaplama, tuning ve araç bakım hizmetleri sunuyoruz. Aracınız bizimle güvende.',
-    keywords: ['araç kaplama', 'tuning', 'detailing', 'mechano', 'araç bakımı', 'garanti kodu', 'oto servis'],
-    authors: [{ name: 'Mechano', url: 'https://mechano.com.tr' }],
-    creator: 'Mechano',
+    keywords: ['araç kaplama', 'tuning', 'detailing', 'metallic garage', 'araç bakımı', 'garanti kodu', 'oto servis'],
+    authors: [{ name: 'Mettalic Garage', url: 'https://mechano.com.tr' }],
+    creator: 'Mettalic Garage',
     metadataBase: new URL('https://mechano.com.tr'),
     alternates: {
         canonical: '/',
     },
     openGraph: {
-        title: 'Mechano | Araç Kaplama Hizmetleri',
+        title: 'Mettalic Garage | Araç Kaplama Hizmetleri',
         description: 'Yüksek kaliteli hizmetlerle aracınıza değer katıyoruz.',
         url: 'https://mechano.com.tr',
         locale: 'tr_TR',
-        siteName: 'Mechano',
+        siteName: 'Mettalic Garage',
         type: 'website',
     },
     robots: {

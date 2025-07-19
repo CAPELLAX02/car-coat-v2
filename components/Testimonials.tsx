@@ -6,12 +6,12 @@ import { FaQuoteLeft, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const testimonials = [
     {
-        text: 'Mechano’nun garantisi içimi rahatlattı. Güvenilir hizmetleri sayesinde aracım yıllardır sorunsuz çalışıyor. Başka yere gitmem!',
+        text: 'Mettalic Garage’nun garantisi içimi rahatlattı. Güvenilir hizmetleri sayesinde aracım yıllardır sorunsuz çalışıyor. Başka yere gitmem!',
         author: 'Jennifer Dust',
         role: 'İK – Archy CO.',
     },
     {
-        text: 'Detaylara inanılmaz özen ve birinci sınıf destek. Mechano ekibi her onarımda bana güven verdi.',
+        text: 'Detaylara inanılmaz özen ve birinci sınıf destek. Mettalic Garage ekibi her onarımda bana güven verdi.',
         author: 'Leo Marshall',
         role: 'Filo Yöneticisi',
     },
@@ -64,7 +64,7 @@ export default function Testimonials() {
             </span><br /> NE DİYOR?
                     </h1>
                     <p className="mt-6 text-gray-300 max-w-md">
-                        Mechano müşteri yorumlarına hoş geldiniz—gerçek deneyimler, güvenilir hizmet ve koşulsuz memnuniyet!
+                        Mettalic Garage müşteri yorumlarına hoş geldiniz—gerçek deneyimler, güvenilir hizmet ve koşulsuz memnuniyet!
                     </p>
 
                     <a

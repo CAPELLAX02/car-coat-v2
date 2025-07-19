@@ -14,27 +14,20 @@ import {
     Award,
     Factory,
     Users,
-    Wrench,
-    Gauge,
-    PaintBucket,
-    Settings2,
-    Bike,
-    Car,
     CheckCircle2,
     Leaf,
     ShieldCheck,
     MapPin,
-    PhoneCall, Droplet, SprayCan, Sparkles, Sun, Lightbulb,
+    PhoneCall,
 } from 'lucide-react';
+import { FaShieldAlt, FaCar, FaSun } from 'react-icons/fa';
 
-/* ─────────────────── Yardımcı Animasyon Ayarı ─────────────────── */
 const fadeUp: MotionProps = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
     transition: { duration: 0.7, ease: 'easeOut' },
 };
 
-/* ─────────────────── Sayı Sayacı ─────────────────── */
 interface CounterProps {
     from?: number;
     to: number;
@@ -60,7 +53,6 @@ function Counter({ from = 0, to, duration = 1.8 }: CounterProps) {
     return <span ref={ref}>0</span>;
 }
 
-/* ─────────────────── İstatistik ve Hizmet Verileri ─────────────────── */
 const stats = [
     { icon: Users,   label: 'Mutlu Müşteri',  value: 12_500 },
     { icon: Factory, label: 'Yıllık Üretim',  value: 3_000 },
@@ -68,26 +60,18 @@ const stats = [
 ];
 
 const services = [
-    { icon: Droplet,      title: 'Seramik Kaplama' },
-    { icon: ShieldCheck,  title: 'Boya Koruma Filmi' },
-    { icon: SprayCan,     title: 'İç Detaylandırma' },
-    { icon: Sparkles,     title: 'Dış Detaylandırma' },
-    { icon: Gauge,        title: 'Motor Yıkama' },
-    { icon: Award,        title: 'Cilalama' },
-    { icon: Sun,          title: 'Cam Filmi' },
-    { icon: Lightbulb,    title: 'Far Yenileme' },
+    { icon: FaShieldAlt, title: 'Boya Koruma Filmi (PPF)' },
+    { icon: FaCar,       title: 'Renk Değişimi' },
+    { icon: FaSun,       title: 'Cam Filmi' },
 ];
 
-/* ─────────────────── Sayfa ─────────────────── */
 export default function AboutPage() {
-    /* Hero parallax */
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
     const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
 
     return (
         <main className="text-black bg-white">
-            {/* ================= HERO ================= */}
             <section ref={heroRef} className="relative h-[75vh] overflow-hidden">
                 <motion.div
                     style={{ y }}
@@ -111,7 +95,6 @@ export default function AboutPage() {
                 </motion.div>
             </section>
 
-            {/* ================= HİKAYE ================= */}
             <section className="pb-24 pt-16 px-6 md:px-12 max-w-6xl mx-auto">
                 <motion.h1 {...fadeUp} className="text-3xl md:text-4xl font-bold mb-12 text-center"  style={{
                     fontSize: '3rem',
@@ -140,7 +123,6 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* ================= İSTATİSTİKLER ================= */}
                 <section className="py-20 bg-gradient-to-r from-red-100 to-orange-100">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 text-center">
                     {stats.map(({ icon: Icon, label, value }) => (
@@ -157,7 +139,6 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* ================= HİZMETLER ================= */}
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
                 <motion.h1 {...fadeUp} className="md:text-4xl font-bold mb-14 text-center" style={{
                     fontSize: '3rem',
@@ -165,7 +146,7 @@ export default function AboutPage() {
                     BAŞLICA <span className="bg-gradient-to-r from-orange-500 to-red-500 text-transparent bg-clip-text h-3.5 z-40"> HİZMETLERİMİZ </span>
                 </motion.h1>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 group">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 group">
                     {services.map(({ icon: Icon, title }) => (
                         <motion.div
                             key={title}
@@ -185,7 +166,6 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* ================= DEĞERLER ================= */}
             <section className="relative py-28 bg-gradient-to-r from-red-900 to-orange-800 text-white">
                 <svg className="absolute top-0" width="100%" height="70" viewBox="0 0 1600 70" preserveAspectRatio="none">
                     <path d="M0 0L1600 70V0H0Z" fill="#fff" />
@@ -214,7 +194,6 @@ export default function AboutPage() {
                 </svg>
             </section>
 
-            {/* ================= CTA ================= */}
             <section className="py-24">
                 <motion.div
                     {...fadeUp}

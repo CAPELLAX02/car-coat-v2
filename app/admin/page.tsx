@@ -676,7 +676,7 @@ export default function AdminPage() {
                 <>
                     <header className="bg-gray-200">
                         <div className="max-w-[85%] mx-auto flex items-center justify-between px-4 py-3">
-                            <h2 className="text-xl xl:text-2xl font-semibold text-gray-800">Mechano Yönetici Paneli</h2>
+                            <h2 className="text-xl xl:text-2xl font-semibold text-gray-800">Mettalic Garage Yönetici Paneli</h2>
 
                             <button
                                 onClick={() => {

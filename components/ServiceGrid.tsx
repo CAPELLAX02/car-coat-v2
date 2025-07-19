@@ -29,7 +29,7 @@ const icons = [
 export default function ServicesGrid() {
     return (
         <section className="w-full bg-white">
-            <div className="grid grid-cols-2 md:grid-cols-4 overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-3 overflow-hidden">
                 {services.map((service, i) => {
                     const Icon = icons[i];
                     const isDark = (Math.floor(i / 4) + i) % 2 === 0;
