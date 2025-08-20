@@ -24,12 +24,12 @@ export async function POST(req: NextRequest) {
         .replace(/{{email}}/g, email)
         .replace(/{{phone}}/g, phone || '-')
         .replace(/{{message}}/g, message)
-        .replace(/{{recipientName}}/g, 'ZuCar');
+        .replace(/{{recipientName}}/g, 'Metallic Garage');
 
     await transporter.sendMail({
         from: `"${name}" <${email}>`,
         to: process.env.SMTP_USER,
-        subject: 'ZuCar | Yeni İletişim Mesajı',
+        subject: 'Metallic Garage | Yeni İletişim Mesajı',
         html,
     });
 
