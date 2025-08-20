@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaInstagram, FaTwitter, FaLinkedin, FaInstagramSquare, FaWhatsapp } from 'react-icons/fa';
+import { FiInstagram, FiMail } from 'react-icons/fi';
 
 export default function Footer() {
     return (
@@ -47,25 +48,38 @@ export default function Footer() {
                 <div className="flex flex-col gap-4">
                     <h4 className="text-xl font-semibold">İletişim</h4>
                     <p className="text-sm">
-                        X Mah. Y Cad. No:1/5A<br />
-                        Kadıköy / İstanbul<br />
-                        <a href="tel:+902161234567" className="underline hover:text-red-700">
-                            0&nbsp;(216)&nbsp;123&nbsp;45&nbsp;67
+                        Kısıklı Mah. Alemdağ Yanyolu Cad. No: 23<br />
+                        Üsküdar/ISTANBUL<br />
+                        <a href="tel:+905384807528" className="underline hover:text-red-700">
+                            0&nbsp;(538)&nbsp;480&nbsp;75&nbsp;28
                         </a>
                     </p>
+                    <motion.a
+                        target="_blank"
+                        href="https://wa.me/905384807528"
+                        className="flex gap-2 items-center px-3 py-2 rounded-none text-black hover:text-white hover:bg-black transition-all duration-200"
+                    >
+                            <FaWhatsapp size={28} /> 0 (538) 480 75 28
+                    </motion.a>
+                     <motion.a
+                        target="_blank"
+                        href="mailto:Metallicgaragee@gmail.com"
+                        className="flex gap-2 items-center px-3 py-2 rounded-none text-black hover:text-white hover:bg-black transition-all duration-200"
+                    >
+                        <FiMail size={28} /> Metallicgaragee@gmail.com
+                    </motion.a>
 
-                    <h4 className="text-xl font-semibold mt-4">Bizi Takip Edin</h4>
-                    <div className="flex">
-                        {[FaInstagram, FaTwitter, FaLinkedin].map((Icon, i) => (
-                            <motion.a
-                                key={i}
-                                href="#"
-                                className="p-3 mr-2 rounded-none text-black hover:text-white hover:bg-black transition-all duration-200"
-                            >
-                                <Icon size={28} />
-                            </motion.a>
-                        ))}
+                    <h4 className="text-xl font-semibold mt-2">Bizi Takip Edin</h4>
+                    <div className="flex gap-2">
+                    <motion.a
+                        target="_blank"
+                        href="https://www.instagram.com/metallicgarage.com.tr"
+                        className="flex gap-2 items-center px-3 py-2 rounded-none text-black hover:text-white hover:bg-black transition-all duration-200"
+                    >
+                        <FiInstagram size={28} /> @metallicgarage.com.tr
+                    </motion.a>
                     </div>
+
                 </div>
             </div>
 

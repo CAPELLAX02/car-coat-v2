@@ -5,21 +5,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaQuoteLeft, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const testimonials = [
-    {
-        text: 'Mettalic Garage’nun garantisi içimi rahatlattı. Güvenilir hizmetleri sayesinde aracım yıllardır sorunsuz çalışıyor. Başka yere gitmem!',
-        author: 'Jennifer Dust',
-        role: 'İK – Archy CO.',
-    },
-    {
-        text: 'Detaylara inanılmaz özen ve birinci sınıf destek. Mettalic Garage ekibi her onarımda bana güven verdi.',
-        author: 'Leo Marshall',
-        role: 'Filo Yöneticisi',
-    },
-    {
-        text: 'Hızlı, güvenilir ve profesyonel. Verdikleri sözü gerçekten yerine getiren bir ekiple çalışmak harika.',
-        author: 'Sandra Klein',
-        role: 'Proje Mühendisi',
-    },
+  {
+    text: 'Aracımın kaplamasını burada yaptırdım. İşçilikten memnun kaldım, teslim süresi de söyledikleri gibiydi.',
+    author: 'Ahmet Demir',
+    role: 'Mühendis',
+  },
+  {
+    text: 'Ufak bir onarım için gelmiştim, ilgileri ve açıklamaları tatmin ediciydi. Fiyat/performans olarak dengeli buldum.',
+    author: 'Elif Yıldız',
+    role: 'Öğretmen',
+  },
+  {
+    text: 'Araç folyo kaplama yaptırdım, genel olarak sonuçtan memnunum. Küçük bir düzeltme talebim oldu, hızlıca ilgilendiler.',
+    author: 'Burak Çelik',
+    role: 'Satış Danışmanı',
+  },
 ];
 
 export default function Testimonials() {

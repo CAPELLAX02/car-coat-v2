@@ -123,7 +123,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-                <section className="py-20 bg-gradient-to-r from-red-100 to-orange-100">
+                {/* <section className="py-20 bg-gradient-to-r from-red-100 to-orange-100">
                 <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 text-center">
                     {stats.map(({ icon: Icon, label, value }) => (
                         <motion.div key={label} {...fadeUp} className="flex flex-col items-center gap-3">
@@ -137,7 +137,7 @@ export default function AboutPage() {
                         </motion.div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
             <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
                 <motion.h1 {...fadeUp} className="md:text-4xl font-bold mb-14 text-center" style={{
@@ -206,10 +206,10 @@ export default function AboutPage() {
                             çıkaralım.
                         </p>
                         <p className="flex items-center gap-2 text-black">
-                            <MapPin size={18} /> X Mah. Y Cad. No:1/5A Kadıköy / İstanbul
+                            <MapPin size={18} /> Kısıklı Mah. Alemdağ Yanyolu Cad. No: 23 Üsküdar/ISTANBUL
                         </p>
                         <p className="flex items-center gap-2 text-black">
-                            <PhoneCall size={18} /> 0 (216) 123 45 67
+                            <PhoneCall size={18} /> 0 (538) 480 75 28
                         </p>
                     </div>
 

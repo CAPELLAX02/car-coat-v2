@@ -81,7 +81,7 @@ export default function Header() {
 
                     {/* -------- RIGHT ICONS (DESKTOP) -------- */}
                     <div className="hidden md:flex items-center gap-4">
-                        {[Facebook, Instagram, Search].map((Icon, i) => (
+                        {/* {[Facebook, Instagram, Search].map((Icon, i) => (
                             <a
                                 href="#"
                                 key={i}
@@ -89,7 +89,7 @@ export default function Header() {
                             >
                                 <Icon size={18} />
                             </a>
-                        ))}
+                        ))} */}
 
                         <Link href="/contact">
                             <button

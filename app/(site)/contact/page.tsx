@@ -108,42 +108,30 @@ export default function ContactPage() {
                             </p>
 
                             {/* Social Media Buttons */}
-                            <div className="flex gap-4 mt-6 flex-wrap">
-                                {[
-                                    {
-                                        icon: <FiFacebook size={36} />,
-                                        color: 'bg-gray-800', // Facebook blue
-                                        hover: 'hover:bg-[#1877F2] hover:scale-110 hover:border-[#1877F2] hover:text-white hover:-translate-y-1',
-                                    },
-                                    {
-                                        icon: <FiTwitter size={36} />,
-                                        color: 'bg-gray-800', // Twitter blue
-                                        hover: 'hover:bg-[#1DA1F2] hover:scale-110 hover:border-[#1DA1F2] hover:text-white hover:-translate-y-1',
-                                    },
-                                    {
-                                        icon: <FiYoutube size={36} />,
-                                        color: 'bg-gray-800', // YouTube red
-                                        hover: 'hover:bg-[#FF0000] hover:scale-110 hover:border-[#FF0000] hover:text-white hover:-translate-y-1',
-                                    },
-                                    {
-                                        icon: <FaWhatsapp size={36} />,
-                                        color: 'bg-gray-800', // WhatsApp green
-                                        hover: 'hover:bg-[#25D366] hover:scale-110 hover:border-[#25D366] hover:text-white hover:-translate-y-1',
-                                    },
-                                    {
-                                        icon: <FiInstagram size={36} />,
-                                        color: 'bg-gray-800',
-                                        hover: 'hover:bg-fuchsia-500 hover:scale-110 hover:border-fuchsia-500 hover:text-white hover:-translate-y-1',
-                                    },
-                                ].map((btn, idx) => (
-                                    <button
-                                        key={idx}
-                                        className={`text-white cursor-pointer border-gray-800 border-4 p-2 rounded-none ${btn.color} ${btn.hover} transition-all duration-300`}
-                                    >
-                                        {btn.icon}
-                                    </button>
-                                ))}
-                            </div>
+<div className="flex gap-4 mt-6 flex-wrap">
+  {/* WhatsApp */}
+  <a
+    href="https://wa.me/905384807528?text=Merhaba%20Metallic%20Garage%2C%20bilgi%20almak%20istiyorum."
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="WhatsApp ile yaz"
+    className="text-white cursor-pointer border-gray-800 border-4 p-2 rounded-none bg-gray-800 hover:bg-[#25D366] hover:scale-110 hover:border-[#25D366] hover:text-white hover:-translate-y-1 transition-all duration-300"
+  >
+    <FaWhatsapp size={36} />
+  </a>
+
+  {/* Instagram */}
+  <a
+    href="https://www.instagram.com/metallicgarage.com.tr"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram profilimiz"
+    className="text-white cursor-pointer border-gray-800 border-4 p-2 rounded-none bg-gray-800 hover:bg-fuchsia-500 hover:scale-110 hover:border-fuchsia-500 hover:text-white hover:-translate-y-1 transition-all duration-300"
+  >
+    <FiInstagram size={36} />
+  </a>
+</div>
+
                         </motion.div>
                     </motion.div>
 
