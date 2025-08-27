@@ -1,14 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-admin';
+import { NextResponse } from "next/server";
+import { db } from "@/lib/firebase-admin";
 
-export async function GET(_: NextRequest) {
+export async function GET() {
   try {
-    console.log("[API] GET /api/kodlar → fetching data from Firebase…");
-    const snapshot = await db.ref('kodlar').once('value');
-    console.log("[API] Firebase snapshot:", snapshot.val());
+    const snapshot = await db.ref("kodlar").once("value");
     return NextResponse.json(snapshot.val() || {});
   } catch (err) {
-    console.error("[API] Error in /api/kodlar:", err);
+    console.error("Firebase error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
